@@ -90,7 +90,8 @@ Scope {
             WlrLayershell.layer: WlrLayer.Overlay
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
             WlrLayershell.namespace: "kalango-launcher"
-            BackgroundEffect.blurRegion: Region { item: panel; radius: Theme.radius }
+            // Blur the whole monitor behind the launcher, not just the panel
+            BackgroundEffect.blurRegion: Region { item: backdrop }
 
             readonly property var tree: Menu.build(root.apps())
             // Navigation stack of menu nodes; last element is the current one
@@ -143,10 +144,19 @@ Scope {
                 else root.run(item.run);
             }
 
-            // Click anywhere outside the panel to close
-            MouseArea {
+            // Tinted, blurred backdrop over the whole screen; click it to close
+            Rectangle {
+                id: backdrop
                 anchors.fill: parent
-                onClicked: root.open = false
+                color: Theme.backdrop
+                opacity: 0
+                Component.onCompleted: opacity = 1
+                Behavior on opacity { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: root.open = false
+                }
             }
 
             GradientFrame {
