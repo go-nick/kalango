@@ -41,6 +41,10 @@ rc DisableRoundMaximize true; rc DisableOutlineMaximize true
 # kalango shell surfaces (launcher, ...) draw their own frames
 rc Exclusions quickshell
 
+echo ":: open/close animation"
+# Scale zooms new windows; kalango shell surfaces should only fade (see script)
+"$(dirname "$0")/scripts/kwin-scale-fade-only.sh"
+
 echo ":: blur"
 kw kwinrc Plugins blurEnabled true
 kw kwinrc Effect-blur BlurStrength 3

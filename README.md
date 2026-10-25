@@ -61,6 +61,10 @@ packages.txt zypper packages
 The border effect is compiled against your exact KWin version. If borders vanish after
 `zypper dup`, run `nickborders-rebuild` (or `scripts/build-borders.sh`) and log out/in.
 
+`scripts/kwin-scale-fade-only.sh` keeps a patched copy of KWin's Scale animation so the
+launcher fades instead of zooming. Re-run it after a Plasma update so the copy tracks upstream;
+it stops with an error if upstream changed too much to patch.
+
 ## Upstream projects
 
 - [Krohnkite](https://github.com/anametologin/krohnkite) 0.9.9.2
