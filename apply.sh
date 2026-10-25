@@ -55,6 +55,8 @@ kw konsolerc "Desktop Entry" DefaultProfile NickLab.profile
 
 echo ":: shortcuts"
 sc() { kwriteconfig6 --file kglobalshortcutsrc --group "$1" --key "$2" "$3"; }
+# System Monitor also defaults to Meta+Escape; give it KDE's classic Ctrl+Escape
+kwriteconfig6 --file kglobalshortcutsrc --group services --group org.kde.plasma-systemmonitor.desktop --key _launch "Ctrl+Esc"
 sc ksmserver   "Lock Session"      "Screensaver	Meta+Escape,Screensaver	Meta+L,Lock Session"
 sc kwin        "Window Close"      "Alt+F4	Meta+Q,Alt+F4,Close Window"
 sc kwin        "Show Desktop"      "none,Meta+D,Peek at Desktop"
