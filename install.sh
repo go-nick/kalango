@@ -29,4 +29,7 @@ echo ":: krohnkite"
 echo ":: borders"
 "$REPO/scripts/build-borders.sh"
 
+echo ":: quickshell"
+"$REPO/scripts/build-quickshell.sh"
+
 "$REPO/apply.sh"

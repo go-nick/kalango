@@ -14,3 +14,24 @@ kwin6-devel
 kf6-kwindowsystem-devel
 qt6-quick-devel
 qt6-core-private-devel
+
+# build tools for Quickshell (built into ~/.local until it ships on OBS)
+ninja
+qt6-base-private-devel
+qt6-declarative-private-devel
+qt6-shadertools-devel
+qt6-svg-devel
+spirv-tools
+cli11-devel
+wayland-devel
+wayland-protocols-devel
+libdrm-devel
+libgbm-devel
+vulkan-headers
+libxcb-devel
+pipewire-devel
+pam-devel
+polkit-devel
+glib2-devel
+jemalloc-devel
+cpptrace-devel
