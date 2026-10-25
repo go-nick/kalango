@@ -81,4 +81,8 @@ kw $R General rules "$rules"
 
 echo ":: reload"
 qdbus6 org.kde.KWin /KWin reconfigure >/dev/null 2>&1 || true
+# Effects only re-read their settings when reconfigured individually
+for fx in kwin4_effect_shapecorners blur; do
+    qdbus6 org.kde.KWin /Effects org.kde.kwin.Effects.reconfigureEffect "$fx" >/dev/null 2>&1 || true
+done
 echo "done. Log out and back in once so KWin reloads scripts, effects and shortcuts."
