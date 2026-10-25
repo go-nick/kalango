@@ -15,6 +15,9 @@ Scope {
 
     property bool open: false
     property string startAt: "root"
+    // The window outlives `open` while the close animation plays
+    property bool alive: false
+    onOpenChanged: if (open) alive = true
 
     // IPC names are prefixed (metaLauncher*) so they can never collide with
     // `qs ipc` subcommands (show, call, wait, listen, prop):
@@ -79,7 +82,7 @@ Scope {
     }
 
     LazyLoader {
-        active: root.open
+        active: root.alive
 
         PanelWindow {
             id: win
@@ -88,7 +91,9 @@ Scope {
             anchors { top: true; bottom: true; left: true; right: true }
             exclusionMode: ExclusionMode.Ignore
             WlrLayershell.layer: WlrLayer.Overlay
-            WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+            // Release the keyboard as soon as we close, before the animation ends,
+            // so focus is back on the previous window right away
+            WlrLayershell.keyboardFocus: root.open ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
             WlrLayershell.namespace: "kalango-launcher"
             // Blur the whole monitor behind the launcher, not just the panel
             BackgroundEffect.blurRegion: Region { item: backdrop }
@@ -98,6 +103,21 @@ Scope {
             property var stack: Menu.pathTo(tree, root.startAt) || [tree]
             readonly property var node: stack[stack.length - 1]
             property var confirming: null
+
+            // 0 = hidden, 1 = shown; drives the open/close animation
+            property real reveal: 0
+            Component.onCompleted: reveal = 1
+            Behavior on reveal {
+                NumberAnimation {
+                    duration: root.open ? 170 : 120
+                    easing.type: root.open ? Easing.OutCubic : Easing.InCubic
+                }
+            }
+            Connections {
+                target: root
+                function onOpenChanged() { win.reveal = root.open ? 1 : 0; }
+            }
+            onRevealChanged: if (reveal === 0 && !root.open) root.alive = false
 
             readonly property var rows: {
                 const q = input.text.trim().toLowerCase();
@@ -149,12 +169,11 @@ Scope {
                 id: backdrop
                 anchors.fill: parent
                 color: Theme.backdrop
-                opacity: 0
-                Component.onCompleted: opacity = 1
-                Behavior on opacity { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
+                opacity: win.reveal
 
                 MouseArea {
                     anchors.fill: parent
+                    enabled: root.open
                     onClicked: root.open = false
                 }
             }
@@ -165,7 +184,11 @@ Scope {
                 width: Math.min(720, win.width - 40)
                 height: content.implicitHeight + 32
                 anchors.horizontalCenter: parent.horizontalCenter
-                y: Math.round(win.height * 0.2)
+                // Fade in, grow from 96% and drop 12px into place
+                y: Math.round(win.height * 0.2 - 12 * (1 - win.reveal))
+                opacity: win.reveal
+                scale: 0.96 + 0.04 * win.reveal
+                transformOrigin: Item.Top
 
                 // Swallow clicks so they don't reach the close area behind
                 MouseArea { anchors.fill: parent }
