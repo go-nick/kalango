@@ -1,0 +1,77 @@
+diff --git a/src/Effect.cpp b/src/Effect.cpp
+index 0578b98..fac7397 100644
+--- a/src/Effect.cpp
++++ b/src/Effect.cpp
+@@ -157,6 +157,11 @@ void ShapeCorners::Effect::prePaintWindow(KWin::EffectWindow *kwindow, KWin::Win
+     if (window->isAnimating) {
+         kwindow->addRepaintFull();
+     }
++    // NickLab patch: spinning gradient needs a fresh frame every vblank on the active window
++    if (Config::outlineSpinSeconds() > 0 && Config::outlineIsGradient() && window->hasOutline()
++        && kwindow == KWin::effects->activeWindow()) {
++        kwindow->addRepaintFull();
++    }
+ 
+     // If the window should have rounded corners, adjust the paint and opaque regions.
+     if (window->hasRoundCorners()) {
+diff --git a/src/Shader.cpp b/src/Shader.cpp
+index a39f410..a0f277a 100644
+--- a/src/Shader.cpp
++++ b/src/Shader.cpp
+@@ -6,9 +6,12 @@
+ #include "Utils.h"
+ #include "Window.h"
+ #include "WindowConfig.h"
++#include <chrono>
++#include <cmath>
+ #if QT_VERSION_MAJOR >= 6
+ #include <core/pixelgrid.h>
+ #include <effect/effect.h>
++#include <effect/effecthandler.h>
+ #include <effect/effectwindow.h>
+ #include <opengl/glutils.h>
+ #else
+@@ -18,6 +21,17 @@
+ 
+ namespace
+ {
++    // NickLab patch: extra angle for the spinning gradient on the active window
++    float spinAngle(const ShapeCorners::Window &window)
++    {
++        const double period = ShapeCorners::Config::outlineSpinSeconds();
++        if (period <= 0 || window.w != KWin::effects->activeWindow()) {
++            return 0.F;
++        }
++        static const auto start = std::chrono::steady_clock::now();
++        const double secs = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
++        return static_cast<float>(std::fmod(secs / period, 1.0) * 360.0);
++    }
+     /**
+      * @brief Converts a QSizeF to a QVector2D.
+      * @param size The QSizeF to convert.
+@@ -156,7 +170,7 @@ void ShapeCorners::Shader::Bind(const Window &window, const double scale) const
+         // color1 == color2 gives a solid outline; they differ only when a gradient is configured.
+         m_shader->setUniform(m_shader_outlineColor1, outline.color1.toQColor());
+         m_shader->setUniform(m_shader_outlineColor2, outline.color2.toQColor());
+-        m_shader->setUniform(m_shader_outlineAngle, outline.angle);
++        m_shader->setUniform(m_shader_outlineAngle, outline.angle + spinAngle(window));
+         m_shader->setUniform(m_shader_secondOutlineColor1, secondOutline.color1.toQColor());
+         m_shader->setUniform(m_shader_secondOutlineColor2, secondOutline.color2.toQColor());
+         m_shader->setUniform(m_shader_secondOutlineAngle, secondOutline.angle);
+diff --git a/src/kcm/options.kcfg b/src/kcm/options.kcfg
+index 4c34714..7b99c3d 100644
+--- a/src/kcm/options.kcfg
++++ b/src/kcm/options.kcfg
+@@ -138,6 +138,12 @@
+         <entry name="InactiveOutlineColor2" type="Color">
+             <default>black</default>
+         </entry>
++        <entry name="OutlineSpinSeconds" type="Double">
++            <label>NickLab: seconds per rotation of the active outline gradient (0 = static)</label>
++            <default>0</default>
++            <min>0</min>
++            <max>120</max>
++        </entry>
+         <entry name="OutlineGradientAngle" type="Int">
+             <default>45</default>
+             <min>0</min>

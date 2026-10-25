@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Rebuild the KDE-Rounded-Corners effect after a Plasma/KWin update (zypper dup).
+set -euo pipefail
+cd ~/.local/src/KDE-Rounded-Corners
+rm -rf build
+cmake -B build -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j"$(nproc)"
+sudo cmake --install build
+echo "Done. Log out and back in to reload the effect."
