@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=NickKeys
+Comment=Search all configured keyboard shortcuts
+Exec=@HOME@/.local/bin/nickkeys --gui
+Icon=preferences-desktop-keyboard-shortcuts
+Terminal=false
+Categories=Utility;
