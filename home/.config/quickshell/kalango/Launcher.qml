@@ -1,5 +1,7 @@
-// kalango launcher (Meta+Space) — Omarchy-style menu of task categories
-// (Apps, Learn, Appearance, Trigger, Settings, Software, System) filled with openSUSE/KDE tools.
+// kalango launcher — two views of one panel:
+//   menu  (Meta+Space): Omarchy-style task categories (Apps, Learn, Appearance, Trigger,
+//                       Settings, Software, System) filled with openSUSE/KDE tools
+//   hints (Meta tap):   the main Meta shortcuts, runnable; typing switches to search
 // Typing at the top searches everything; inside a category it searches that category.
 // Opens on the active monitor (the compositor picks the screen).
 import QtQuick
@@ -15,6 +17,8 @@ Scope {
 
     property bool open: false
     property string startAt: "root"
+    property string mode: "menu"    // "menu" or "hints"
+    signal reset()
     // The window outlives `open` while the close animation plays
     property bool alive: false
     onOpenChanged: if (open) alive = true
@@ -22,15 +26,31 @@ Scope {
     // IPC names are prefixed (metaLauncher*) so they can never collide with
     // `qs ipc` subcommands (show, call, wait, listen, prop):
     //   qs -c kalango ipc call launcher metaLauncherToggle
+    //   qs -c kalango ipc call launcher metaLauncherToggleHints
     //   qs -c kalango ipc call launcher metaLauncherOpenAt system
     IpcHandler {
         target: "launcher"
 
-        function metaLauncherToggle(): void { root.startAt = "root"; root.open = !root.open; }
-        function metaLauncherOpen(): void { root.startAt = "root"; root.open = true; }
-        function metaLauncherOpenAt(id: string): void { root.startAt = id; root.open = true; }
+        function metaLauncherToggle(): void { root.toggle("menu"); }
+        function metaLauncherToggleHints(): void { root.toggle("hints"); }
+        function metaLauncherOpen(): void { root.show("menu", "root"); }
+        function metaLauncherOpenAt(id: string): void { root.show("menu", id); }
         function metaLauncherClose(): void { root.open = false; }
         function metaLauncherIsOpen(): bool { return root.open; }
+        function metaLauncherMode(): string { return root.open ? root.mode : ""; }
+    }
+
+    function show(mode, at) {
+        root.mode = mode;
+        root.startAt = at;
+        root.open = true;
+        root.reset();
+    }
+
+    // Same key again closes; the other key switches view (Meta+Space from hints opens the menu)
+    function toggle(mode) {
+        if (root.open && root.mode === mode) root.open = false;
+        else show(mode, "root");
     }
 
     // Rank `label` (+ secondary text) against the query: higher is better, -1 means no match.
@@ -119,8 +139,21 @@ Scope {
             }
             onRevealChanged: if (reveal === 0 && !root.open) root.alive = false
 
+            Connections {
+                target: root
+                function onReset() {
+                    win.stack = Menu.pathTo(win.tree, root.startAt) || [win.tree];
+                    input.text = "";
+                    list.currentIndex = 0;
+                    win.confirming = null;
+                }
+            }
+
+            readonly property bool hints: root.mode === "hints"
+
             readonly property var rows: {
                 const q = input.text.trim().toLowerCase();
+                if (q === "" && hints) return Menu.hints().map(h => ({ item: h, path: [] }));
                 if (q === "") return node.children.map(c => ({ item: c, path: [] }));
                 // Search every leaf below the current node; apps appear in several
                 // categories, so keep each one once
@@ -158,6 +191,7 @@ Scope {
                 const item = row.item;
                 if (item.children) return enter(item);
                 if (item.entry) { item.entry.execute(); root.open = false; return; }
+                if (item.run.menu) { root.mode = "menu"; return; }
                 if (item.confirm && confirming !== item) { confirming = item; return; }
                 root.open = false;
                 if (item.run.shortcut) { deferred.spec = item.run; deferred.restart(); }
@@ -201,7 +235,7 @@ Scope {
                     // Breadcrumb: kalango › Settings › Administration (YaST)
                     Text {
                         Layout.fillWidth: true
-                        text: win.stack.map(n => n.label).join("  ›  ")
+                        text: win.hints ? "kalango  ›  Meta shortcuts" : win.stack.map(n => n.label).join("  ›  ")
                         color: Theme.solar
                         font.pixelSize: 12
                         font.letterSpacing: 1
@@ -226,11 +260,17 @@ Scope {
                             selectionColor: Theme.pine
                             font.pixelSize: 20
                             clip: true
-                            onTextChanged: { list.currentIndex = 0; win.confirming = null; }
+                            onTextChanged: {
+                                // Typing in hint mode turns it into a full search
+                                if (win.hints && text !== "") root.mode = "menu";
+                                list.currentIndex = 0;
+                                win.confirming = null;
+                            }
 
                             Text {
                                 visible: !input.text
-                                text: win.node.id === "root" ? "Search apps, settings, actions…" : "Search " + win.node.label + "…"
+                                text: win.hints ? "Type to search everything…"
+                                    : win.node.id === "root" ? "Search apps, settings, actions…" : "Search " + win.node.label + "…"
                                 color: Theme.muted
                                 font: input.font
                             }
@@ -269,7 +309,9 @@ Scope {
                     ListView {
                         id: list
                         Layout.fillWidth: true
-                        implicitHeight: Math.min(count, 10) * 46
+                        readonly property int rowHeight: win.hints ? 38 : 46
+                        // Hint mode is a cheat card: show every row at once
+                        implicitHeight: Math.min(count, win.hints ? 20 : 10) * rowHeight
                         visible: count > 0
                         clip: true
                         model: win.rows
@@ -296,7 +338,7 @@ Scope {
                             readonly property bool current: ListView.isCurrentItem
                             readonly property bool asking: win.confirming === item
                             width: list.width
-                            height: 46
+                            height: list.rowHeight
 
                             RowLayout {
                                 anchors { fill: parent; leftMargin: 14; rightMargin: 14 }
@@ -387,7 +429,8 @@ Scope {
 
                     Text {
                         Layout.fillWidth: true
-                        text: "↑↓ move   ⏎ open   ⌫ back   esc close"
+                        text: win.hints ? "↑↓ move   ⏎ run   type to search   esc close"
+                                        : "↑↓ move   ⏎ open   ⌫ back   esc close"
                         color: Theme.muted
                         font.pixelSize: 11
                         horizontalAlignment: Text.AlignRight

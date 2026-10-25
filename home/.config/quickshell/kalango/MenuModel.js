@@ -10,7 +10,7 @@
 //   { terminal: "..." }       Konsole running a command, kept open at the end
 //   { url: "https://..." }    default browser
 //   { shortcut: [component, action] }  invoke an existing KDE global shortcut
-//   { ipc: [target, function] }        call into this shell
+//   { menu: true }                     switch the launcher to the menu (stays open)
 .pragma library
 
 const g = (cp) => String.fromCodePoint(cp);
@@ -166,6 +166,32 @@ function build(allApps) {
             },
         ],
     };
+}
+
+// Hint mode (lone Meta tap): the main Meta actions needed to drive the system.
+// Hard-coded for now. Each row runs the existing KDE global shortcut, after the
+// launcher closes, so it acts on the window that was focused before.
+function hints() {
+    const kwin = (action) => ({ shortcut: ["kwin", action] });
+    return [
+        { label: "Menu & Search", glyph: g(0xF0349), keys: "Meta + Space", hint: "Apps, settings, YaST, capture, power", run: { menu: true } },
+        { label: "All Shortcuts", glyph: g(0xF030C), keys: "Meta + /", hint: "NickKeys: every shortcut, searchable", run: { cmd: ["~/.local/bin/nickkeys", "--gui"] } },
+        { label: "Focus Left", glyph: g(0xF004D), keys: "Meta + H", hint: "Tiling: move focus", run: kwin("KrohnkiteFocusLeft") },
+        { label: "Focus Down", glyph: g(0xF0045), keys: "Meta + J", hint: "Tiling: move focus", run: kwin("KrohnkiteFocusDown") },
+        { label: "Focus Up", glyph: g(0xF005D), keys: "Meta + K", hint: "Tiling: move focus", run: kwin("KrohnkiteFocusUp") },
+        { label: "Focus Right", glyph: g(0xF0054), keys: "Meta + L", hint: "Tiling: move focus (also across monitors)", run: kwin("KrohnkiteFocusRight") },
+        { label: "Move Window Left", glyph: g(0xF0B28), keys: "Meta + Shift + H", hint: "Tiling: swap with neighbor", run: kwin("KrohnkiteShiftLeft") },
+        { label: "Move Window Down", glyph: g(0xF0B26), keys: "Meta + Shift + J", hint: "Tiling: swap with neighbor", run: kwin("KrohnkiteShiftDown") },
+        { label: "Move Window Up", glyph: g(0xF0B29), keys: "Meta + Shift + K", hint: "Tiling: swap with neighbor", run: kwin("KrohnkiteShiftUp") },
+        { label: "Move Window Right", glyph: g(0xF0B27), keys: "Meta + Shift + L", hint: "Tiling: swap with neighbor", run: kwin("KrohnkiteShiftRight") },
+        { label: "Make Main Window", glyph: g(0xF0E45), keys: "Meta + Return", hint: "Tiling: move to the big area", run: kwin("KrohnkiteSetMaster") },
+        { label: "Float / Unfloat Window", glyph: g(0xF0B19), keys: "Meta + F", hint: "Tiling: free placement with the mouse", run: kwin("KrohnkiteToggleFloat") },
+        { label: "Float / Unfloat All", glyph: g(0xF1009), keys: "Meta + Shift + F", hint: "Tiling: quick normal-desktop mode", run: kwin("KrohnkiteFloatAll") },
+        { label: "Monocle", glyph: g(0xF0293), keys: "Meta + M", hint: "Tiling: one window fills the screen", run: kwin("KrohnkiteMonocleLayout") },
+        { label: "Close Window", glyph: g(0xF05AD), keys: "Meta + Q", hint: "Closes the window, not always the app", run: kwin("Window Close") },
+        { label: "Overview", glyph: g(0xF0568), keys: "Meta + W", hint: "All windows and desktops", run: kwin("Overview") },
+        { label: "Lock Screen", glyph: g(0xF033E), keys: "Meta + Esc", hint: "Lock the session", run: { shortcut: ["ksmserver", "Lock Session"] } },
+    ];
 }
 
 // Every runnable leaf under `node`, with its menu path (used for search)
