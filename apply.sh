@@ -54,18 +54,18 @@ echo ":: konsole"
 kw konsolerc "Desktop Entry" DefaultProfile NickLab.profile
 
 echo ":: shortcuts"
-sc() { kwriteconfig6 --file kglobalshortcutsrc --group "$1" --key "$2" "$3"; }
-# System Monitor also defaults to Meta+Escape; give it KDE's classic Ctrl+Escape
-kwriteconfig6 --file kglobalshortcutsrc --group services --group org.kde.plasma-systemmonitor.desktop --key _launch "Ctrl+Esc"
-sc ksmserver   "Lock Session"      "Screensaver	Meta+Escape,Screensaver	Meta+L,Lock Session"
-sc kwin        "Window Close"      "Alt+F4	Meta+Q,Alt+F4,Close Window"
-sc kwin        "Show Desktop"      "none,Meta+D,Peek at Desktop"
-sc kwin        "Edit Tiles"        "none,Meta+T,Toggle Tiles Editor"
-sc plasmashell "manage activities" "none,Meta+Q,Show Activity Switcher"
-kwriteconfig6 --file kglobalshortcutsrc --group services --group nickkeys.desktop --key _launch "Meta+/"
-# Meta+Space is the kalango launcher; KRunner stays on Alt+Space / Alt+F2
-kwriteconfig6 --file kglobalshortcutsrc --group services --group kalango-launcher.desktop --key _launch "Meta+Space"
-kwriteconfig6 --file kglobalshortcutsrc --group services --group org.kde.krunner.desktop --key _launch "Alt+Space	Alt+F2	Search"
+# Set live through kglobalaccel (no logout). The helper refuses keys another
+# action owns, so free keys before binding them.
+ks() { "$(dirname "$0")/scripts/kde-shortcut.py" "$@"; }
+ks kwin "Show Desktop"                                     # frees Meta+D for Krohnkite
+ks kwin "Edit Tiles"                                       # frees Meta+T for Krohnkite
+ks plasmashell "manage activities"                         # frees Meta+Q
+ks org.kde.krunner.desktop _launch Alt+Space Alt+F2 Search # frees Meta+Space
+ks kalango-launcher.desktop _launch Meta+Space
+ks org.kde.plasma-systemmonitor.desktop _launch Ctrl+Escape # frees Meta+Escape
+ks ksmserver "Lock Session" Screensaver Meta+Escape        # frees Meta+L for Krohnkite
+ks kwin "Window Close" Alt+F4 Meta+Q
+ks nickkeys.desktop _launch Meta+/
 
 echo ":: window rules"
 R=kwinrulesrc id=nickkeys-popup
