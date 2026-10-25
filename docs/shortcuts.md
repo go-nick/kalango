@@ -7,7 +7,8 @@ Windows tile automatically (Krohnkite). The mouse still works for everything.
 
 | Keys | Action |
 |---|---|
-| **Meta + Space** | Search anything: apps, files, settings, math (KRunner) |
+| **Meta + Space** | kalango launcher: search and launch apps |
+| Alt + Space | KRunner: search files, settings, math |
 | **Meta + /** | NickKeys: search every shortcut on the system |
 
 ## Mouse (works as usual)

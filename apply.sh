@@ -55,7 +55,9 @@ sc kwin        "Show Desktop"      "none,Meta+D,Peek at Desktop"
 sc kwin        "Edit Tiles"        "none,Meta+T,Toggle Tiles Editor"
 sc plasmashell "manage activities" "none,Meta+Q,Show Activity Switcher"
 kwriteconfig6 --file kglobalshortcutsrc --group services --group nickkeys.desktop --key _launch "Meta+/"
-kwriteconfig6 --file kglobalshortcutsrc --group services --group org.kde.krunner.desktop --key _launch "Meta+Space	Alt+Space	Alt+F2	Search"
+# Meta+Space is the kalango launcher; KRunner stays on Alt+Space / Alt+F2
+kwriteconfig6 --file kglobalshortcutsrc --group services --group kalango-launcher.desktop --key _launch "Meta+Space"
+kwriteconfig6 --file kglobalshortcutsrc --group services --group org.kde.krunner.desktop --key _launch "Alt+Space	Alt+F2	Search"
 
 echo ":: window rules"
 R=kwinrulesrc id=nickkeys-popup
