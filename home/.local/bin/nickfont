@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# nickfont — switch the KDE UI font live.
+#   nickfont                 pick interactively (fzf: font applies as you scroll)
+#   nickfont "Hack Nerd Font" [size]
+#   nickfont --list
+set -euo pipefail
+
+SIZE="${NICKFONT_SIZE:-10}"
+
+list_fonts() {
+    fc-list : family | tr ',' '\n' | grep -E ' Nerd Font$' \
+        | grep -v '^Symbols' | sort -u
+}
+
+apply() {
+    local family="$1" size="${2:-$SIZE}"
+    local spec="$family,$size,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
+    local small="$family,$((size - 2)),-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
+    local title="$family,$((size + 1)),-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
+    for key in font menuFont toolBarFont fixed; do
+        kwriteconfig6 --file kdeglobals --group General --key "$key" "$spec"
+    done
+    kwriteconfig6 --file kdeglobals --group General --key smallestReadableFont "$small"
+    kwriteconfig6 --file kdeglobals --group WM --key activeFont "$title"
+    # Tell running Qt/KDE apps and KWin to reload fonts
+    dbus-send --session --type=signal /KGlobalSettings \
+        org.kde.KGlobalSettings.notifyChange int32:1 int32:0
+    qdbus6 org.kde.KWin /KWin reconfigure >/dev/null 2>&1 || true
+}
+
+case "${1:-}" in
+    --list) list_fonts; exit 0 ;;
+    --apply) apply "$2" "${3:-$SIZE}"; exit 0 ;;
+    "") ;;
+    *) apply "$1" "${2:-$SIZE}"; echo "Applied: $1 ${2:-$SIZE}"; exit 0 ;;
+esac
+
+current="$(kreadconfig6 --group General --key font | cut -d, -f1)"
+
+if command -v fzf >/dev/null; then
+    choice="$(list_fonts | fzf --prompt="font> " --header="current: $current  (Enter keep · Esc revert)" \
+        --bind "focus:execute-silent($0 --apply {} $SIZE)")" || {
+        apply "$current" "$SIZE"; echo "Reverted to $current"; exit 0; }
+    apply "$choice" "$SIZE"; echo "Applied: $choice $SIZE"
+else
+    mapfile -t fonts < <(list_fonts)
+    echo "current: $current"
+    PS3="pick a number (Ctrl+C to quit): "
+    select f in "${fonts[@]}"; do
+        [[ -n "${f:-}" ]] && { apply "$f" "$SIZE"; echo "Applied: $f — pick another or Ctrl+C"; }
+    done
+fi
