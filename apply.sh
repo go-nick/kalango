@@ -43,7 +43,7 @@ rc Exclusions quickshell
 
 echo ":: blur"
 kw kwinrc Plugins blurEnabled true
-kw kwinrc Effect-blur BlurStrength 10
+kw kwinrc Effect-blur BlurStrength 3
 kw kwinrc Effect-blur NoiseStrength 2
 
 echo ":: konsole"
