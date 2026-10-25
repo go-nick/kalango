@@ -42,7 +42,9 @@ Scope {
 
     function search(text) {
         const q = text.trim().toLowerCase();
-        const apps = DesktopEntries.applications.values.filter(e => !e.noDisplay);
+        // YaST2-groups-* are YaST control-center group headers, not launchable apps
+        const apps = DesktopEntries.applications.values
+            .filter(e => !e.noDisplay && !e.id.startsWith("YaST2-groups-"));
         if (q === "")
             return apps.slice().sort((a, b) => a.name.localeCompare(b.name));
         return apps
