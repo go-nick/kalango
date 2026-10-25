@@ -1,0 +1,45 @@
+--- a/contents/code/script.js
++++ b/contents/code/script.js
+@@ -1251,6 +1251,7 @@
+ }
+ var KWINCONFIG;
+ var KWIN;
++var KWIN_WORKSPACE; // NickLab patch
+ class KWinDriver {
+     get backend() {
+         return KWinDriver.backendName;
+@@ -1290,6 +1291,7 @@
+     }
+     constructor(api) {
+         KWIN = api.kwin;
++        KWIN_WORKSPACE = api.workspace;
+         this.workspace = api.workspace;
+         this.shortcuts = api.shortcuts;
+         this.engine = new TilingEngine();
+@@ -2502,11 +2504,15 @@
+             const tiles = this.windows.getVisibleTiles(ctx.currentSurface);
+             if (tiles.length > 1)
+                 ctx.currentWindow = tiles[0];
++            else
++                nicklabFocusAcrossScreens(dir);
+             return;
+         }
+         const neighbor = this.getNeighborByDirection(ctx, window, dir);
+         if (neighbor)
+             ctx.currentWindow = neighbor;
++        else
++            nicklabFocusAcrossScreens(dir);
+     }
+     swapOrder(window, step) {
+         const srf = window.surface;
+@@ -5227,3 +5233,10 @@
+         return Object.keys(this.items).length;
+     }
+ }
++
++// NickLab patch: no neighbor on this screen -> let KWin pick the window in that direction on any screen
++function nicklabFocusAcrossScreens(dir) {
++    const slots = { up: "slotSwitchWindowUp", down: "slotSwitchWindowDown", left: "slotSwitchWindowLeft", right: "slotSwitchWindowRight" };
++    if (KWIN_WORKSPACE && slots[dir] && typeof KWIN_WORKSPACE[slots[dir]] === "function")
++        KWIN_WORKSPACE[slots[dir]]();
++}
