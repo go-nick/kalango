@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Kalango Hints
+Comment=Show the main Meta shortcuts
+Exec=@HOME@/.local/bin/qs -c kalango ipc call launcher metaLauncherToggleHints
+Icon=preferences-desktop-keyboard-shortcuts
+NoDisplay=true
+Terminal=false
