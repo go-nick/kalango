@@ -62,6 +62,8 @@ ks kwin "Edit Tiles"                                       # frees Meta+T for Kr
 ks plasmashell "manage activities"                         # frees Meta+Q
 ks org.kde.krunner.desktop _launch Alt+Space Alt+F2 Search # frees Meta+Space
 ks kalango-launcher.desktop _launch Meta+Space
+ks plasmashell "activate application launcher" Alt+F1     # frees lone Meta; Kickoff keeps Alt+F1
+ks kalango-hints.desktop _launch Meta                      # lone Meta tap: hint mode
 ks org.kde.plasma-systemmonitor.desktop _launch Ctrl+Escape # frees Meta+Escape
 ks ksmserver "Lock Session" Screensaver Meta+Escape        # frees Meta+L for Krohnkite
 ks kwin "Window Close" Alt+F4 Meta+Q
