@@ -38,6 +38,8 @@ rc SecondOutlineThickness 0;  rc InactiveSecondOutlineThickness 0
 rc ShadowSize 30;             rc InactiveShadowSize 15
 rc DisableRoundTile false;    rc DisableOutlineTile false
 rc DisableRoundMaximize true; rc DisableOutlineMaximize true
+# kalango shell surfaces (launcher, ...) draw their own frames
+rc Exclusions quickshell
 
 echo ":: blur"
 kw kwinrc Plugins blurEnabled true
