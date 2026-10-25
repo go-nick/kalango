@@ -184,10 +184,10 @@ Scope {
                 width: Math.min(720, win.width - 40)
                 height: content.implicitHeight + 32
                 anchors.horizontalCenter: parent.horizontalCenter
-                // Fade in, grow from 96% and drop 12px into place
+                // Fade in, grow from 85% and drop 12px into place
                 y: Math.round(win.height * 0.2 - 12 * (1 - win.reveal))
                 opacity: win.reveal
-                scale: 0.96 + 0.04 * win.reveal
+                scale: 0.85 + 0.15 * win.reveal
                 transformOrigin: Item.Top
 
                 // Swallow clicks so they don't reach the close area behind
