@@ -15,6 +15,8 @@ echo ":: files -> \$HOME"
     # Never clobber favorites someone already starred
     [[ "$f" == */nickkeys-favorites.json && -e "$dest" ]] && continue
     mkdir -p "$(dirname "$dest")"
+    # Dev setups symlink repo dirs into $HOME; writing a file onto itself would empty it
+    [[ "$(realpath -m "$dest")" == "$(realpath "$REPO/home/$f")" ]] && continue
     sed "s|@HOME@|$HOME|g" "$REPO/home/$f" > "$dest"
     [[ -x "$REPO/home/$f" ]] && chmod +x "$dest"
 done
