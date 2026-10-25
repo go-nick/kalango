@@ -1,0 +1,16 @@
+# openSUSE Tumbleweed packages kalango needs (installed by install.sh with zypper)
+
+# fonts
+inter-fonts
+nerdfonts-symbolsonly-fonts
+
+# build tools for KDE-Rounded-Corners
+git
+cmake
+gcc-c++
+kf6-kconfigwidgets-devel
+kf6-kcmutils-devel
+kwin6-devel
+kf6-kwindowsystem-devel
+qt6-quick-devel
+qt6-core-private-devel
