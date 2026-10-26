@@ -1,4 +1,4 @@
-// kalango top bar — slim Omarchy-style panel on every monitor.
+// kalango top bar — three floating islands on every monitor.
 //   left:   notifications (placeholder until kalango's own notifications land)
 //   center: CPU, RAM, network down/up (click opens System Monitor), battery
 //   right:  audio, Wi-Fi, Bluetooth, date + time
@@ -16,7 +16,8 @@ import Quickshell.Wayland
 Scope {
     id: bar
 
-    readonly property int height: 26
+    readonly property int height: 26    // one island
+    readonly property int gap: 4        // space above the islands
 
     function ic(cp) { return String.fromCodePoint(cp); }
     function kcm(name) { Quickshell.execDetached(["systemsettings", name]); }
@@ -69,6 +70,20 @@ Scope {
         }
     }
 
+    // A floating pill of modules; the wallpaper shows between islands
+    component Island: Rectangle {
+        default property alias content: modules.data
+        implicitWidth: modules.implicitWidth + 8
+        implicitHeight: bar.height
+        radius: height / 2
+        color: Theme.island
+        RowLayout {
+            id: modules
+            anchors.centerIn: parent
+            spacing: 0
+        }
+    }
+
     Variants {
         model: Quickshell.screens
 
@@ -78,32 +93,21 @@ Scope {
             screen: modelData
 
             anchors { top: true; left: true; right: true }
-            implicitHeight: bar.height
+            implicitHeight: bar.gap + bar.height
             color: "transparent"
             WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.namespace: "kalango-bar"
-            BackgroundEffect.blurRegion: Region { item: bg }
-
-            Rectangle {
-                id: bg
-                anchors.fill: parent
-                color: Theme.glass
-            }
-            // Signature blue -> green hairline along the bottom edge
-            Rectangle {
-                anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
-                height: 1
-                gradient: Gradient {
-                    orientation: Gradient.Horizontal
-                    GradientStop { position: 0; color: Theme.blue }
-                    GradientStop { position: 1; color: Theme.neon }
-                }
+            // Blur only behind the islands
+            BackgroundEffect.blurRegion: Region {
+                Region { item: left; radius: left.radius }
+                Region { item: center; radius: center.radius }
+                Region { item: right; radius: right.radius }
             }
 
             // ── left ──
-            RowLayout {
-                anchors { left: parent.left; leftMargin: 6; verticalCenter: parent.verticalCenter }
-                spacing: 0
+            Island {
+                id: left
+                anchors { left: parent.left; leftMargin: 10; bottom: parent.bottom }
 
                 Module {
                     icon: bar.ic(0xF009A)    // bell
@@ -112,9 +116,9 @@ Scope {
             }
 
             // ── center: system meters, battery at their right ──
-            RowLayout {
-                anchors.centerIn: parent
-                spacing: 0
+            Island {
+                id: center
+                anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom }
 
                 Module {
                     label: `${bar.ic(0xF0EE0)} ${Math.round(Stats.cpu * 100)}%   `
@@ -139,9 +143,9 @@ Scope {
             }
 
             // ── right ──
-            RowLayout {
-                anchors { right: parent.right; rightMargin: 6; verticalCenter: parent.verticalCenter }
-                spacing: 0
+            Island {
+                id: right
+                anchors { right: parent.right; rightMargin: 10; bottom: parent.bottom }
 
                 // Audio: scroll = volume, right-click = mute, click = sound settings
                 Module {

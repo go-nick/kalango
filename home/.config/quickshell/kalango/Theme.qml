@@ -17,6 +17,8 @@ Singleton {
 
     // Translucent Void for blurred surfaces
     readonly property color glass: Qt.rgba(10 / 255, 15 / 255, 20 / 255, 0.82)
+    // Translucent Pine for the top bar islands
+    readonly property color island: Qt.rgba(12 / 255, 50 / 255, 44 / 255, 0.78)
     // Tint over the blurred screen behind modal surfaces (launcher)
     readonly property color backdrop: Qt.rgba(10 / 255, 15 / 255, 20 / 255, 0.35)
 
