@@ -38,24 +38,36 @@ rc SecondOutlineThickness 0;  rc InactiveSecondOutlineThickness 0
 rc ShadowSize 30;             rc InactiveShadowSize 15
 rc DisableRoundTile false;    rc DisableOutlineTile false
 rc DisableRoundMaximize true; rc DisableOutlineMaximize true
+# kalango shell surfaces (launcher, ...) draw their own frames
+rc Exclusions quickshell
+
+echo ":: open/close animation"
+# Scale zooms new windows; kalango shell surfaces should only fade (see script)
+"$(dirname "$0")/scripts/kwin-scale-fade-only.sh"
 
 echo ":: blur"
 kw kwinrc Plugins blurEnabled true
-kw kwinrc Effect-blur BlurStrength 10
+kw kwinrc Effect-blur BlurStrength 3
 kw kwinrc Effect-blur NoiseStrength 2
 
 echo ":: konsole"
 kw konsolerc "Desktop Entry" DefaultProfile NickLab.profile
 
 echo ":: shortcuts"
-sc() { kwriteconfig6 --file kglobalshortcutsrc --group "$1" --key "$2" "$3"; }
-sc ksmserver   "Lock Session"      "Screensaver	Meta+Escape,Screensaver	Meta+L,Lock Session"
-sc kwin        "Window Close"      "Alt+F4	Meta+Q,Alt+F4,Close Window"
-sc kwin        "Show Desktop"      "none,Meta+D,Peek at Desktop"
-sc kwin        "Edit Tiles"        "none,Meta+T,Toggle Tiles Editor"
-sc plasmashell "manage activities" "none,Meta+Q,Show Activity Switcher"
-kwriteconfig6 --file kglobalshortcutsrc --group services --group nickkeys.desktop --key _launch "Meta+/"
-kwriteconfig6 --file kglobalshortcutsrc --group services --group org.kde.krunner.desktop --key _launch "Meta+Space	Alt+Space	Alt+F2	Search"
+# Set live through kglobalaccel (no logout). The helper refuses keys another
+# action owns, so free keys before binding them.
+ks() { "$(dirname "$0")/scripts/kde-shortcut.py" "$@"; }
+ks kwin "Show Desktop"                                     # frees Meta+D for Krohnkite
+ks kwin "Edit Tiles"                                       # frees Meta+T for Krohnkite
+ks plasmashell "manage activities"                         # frees Meta+Q
+ks org.kde.krunner.desktop _launch Alt+Space Alt+F2 Search # frees Meta+Space
+ks kalango-launcher.desktop _launch Meta+Space
+ks plasmashell "activate application launcher" Alt+F1     # frees lone Meta; Kickoff keeps Alt+F1
+ks kalango-hints.desktop _launch Meta                      # lone Meta tap: hint mode
+ks org.kde.plasma-systemmonitor.desktop _launch Ctrl+Escape # frees Meta+Escape
+ks ksmserver "Lock Session" Screensaver Meta+Escape        # frees Meta+L for Krohnkite
+ks kwin "Window Close" Alt+F4 Meta+Q
+ks nickkeys.desktop _launch Meta+/
 
 echo ":: window rules"
 R=kwinrulesrc id=nickkeys-popup
@@ -77,4 +89,8 @@ kw $R General rules "$rules"
 
 echo ":: reload"
 qdbus6 org.kde.KWin /KWin reconfigure >/dev/null 2>&1 || true
+# Effects only re-read their settings when reconfigured individually
+for fx in kwin4_effect_shapecorners blur; do
+    qdbus6 org.kde.KWin /Effects org.kde.kwin.Effects.reconfigureEffect "$fx" >/dev/null 2>&1 || true
+done
 echo "done. Log out and back in once so KWin reloads scripts, effects and shortcuts."

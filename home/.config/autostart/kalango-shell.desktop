@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Kalango Shell
+Comment=kalango Quickshell instance (launcher)
+Exec=@HOME@/.local/bin/qs -c kalango
+Icon=org.quickshell
+NoDisplay=true
+Terminal=false
+X-KDE-autostart-phase=2

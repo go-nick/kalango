@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Kalango Launcher
+Comment=Search and launch apps
+Exec=@HOME@/.local/bin/qs -c kalango ipc call launcher metaLauncherToggle
+Icon=system-search
+NoDisplay=true
+Terminal=false

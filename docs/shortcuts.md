@@ -7,7 +7,9 @@ Windows tile automatically (Krohnkite). The mouse still works for everything.
 
 | Keys | Action |
 |---|---|
-| **Meta + Space** | Search anything: apps, files, settings, math (KRunner) |
+| **Meta** (tap) | Hints: the main Meta shortcuts, runnable (type to search) |
+| **Meta + Space** | kalango menu: apps, settings, YaST, capture, power (type to search) |
+| Alt + Space | KRunner: search files, settings, math |
 | **Meta + /** | NickKeys: search every shortcut on the system |
 
 ## Mouse (works as usual)
@@ -61,8 +63,9 @@ Directional focus only moves if a window exists on that side.
 | Meta + Shift + Right | Send window to the next monitor |
 | Meta + F1 … F4 | Switch virtual desktop |
 | Meta + G | Grid view of desktops |
-| Meta (tap) | App launcher |
+| Alt + F1 | Plasma app menu (Kickoff) |
 | Meta + Escape | Lock screen |
+| Ctrl + Escape | System Monitor |
 | Meta + Ctrl + Esc | Force-kill a frozen window (click it) |
 
 ## NickLab tools
