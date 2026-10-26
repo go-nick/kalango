@@ -9,4 +9,5 @@ ShellRoot {
     Component.onCompleted: DesktopEntries.applications
 
     Launcher {}
+    Bar {}
 }
