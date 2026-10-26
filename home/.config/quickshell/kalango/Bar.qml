@@ -27,7 +27,7 @@ Scope {
     function load(x) {
         const mix = (a, b, t) => Qt.rgba(a.r + (b.r - a.r) * t, a.g + (b.g - a.g) * t,
                                          a.b + (b.b - a.b) * t, 1);
-        // Blue is lightened a little to stay readable on the Pine islands
+        // Blue is lightened a little to stay readable on the black islands
         return x < 0.6 ? mix(Qt.lighter(Theme.blue, 1.4), Theme.neon, x / 0.6)
                        : mix(Theme.neon, Theme.solar, Math.min(1, (x - 0.6) / 0.3));
     }
