@@ -8,6 +8,10 @@ kw() { kwriteconfig6 --file "$1" --group "$2" --key "$3" "$4"; }
 echo ":: colors"
 plasma-apply-colorscheme NickLab >/dev/null
 
+echo ":: cursor"
+# Built by scripts/build-cursors.py; applies live
+plasma-apply-cursortheme kalango-cursors >/dev/null
+
 echo ":: fonts"
 "$HOME/.local/bin/nickfont" "FiraCode Nerd Font" 10 >/dev/null
 kw kdeglobals General XftAntialias true
