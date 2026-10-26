@@ -4,6 +4,9 @@
 inter-fonts
 nerdfonts-symbolsonly-fonts
 
+# renders the wallpaper SVGs
+rsvg-convert
+
 # build tools for KDE-Rounded-Corners
 git
 cmake

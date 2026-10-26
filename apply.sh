@@ -58,6 +58,21 @@ qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript \
 # Notifications sit under the bar's bell until kalango has its own
 kw plasmanotifyrc Notifications PopupPosition TopLeft
 
+echo ":: wallpapers"
+# Plasma's slideshow crossfades between the kalango wallpapers on every monitor
+# (PNGs rendered by scripts/install-wallpapers.sh). FillMode 2 = crop to fill,
+# so the portrait monitor gets the centre of each drawing.
+WALLS="$HOME/.local/share/wallpapers/kalango"
+qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
+    desktops().forEach(d => {
+        d.wallpaperPlugin = 'org.kde.slideshow';
+        d.currentConfigGroup = ['Wallpaper', 'org.kde.slideshow', 'General'];
+        d.writeConfig('SlidePaths', ['$WALLS/']);
+        d.writeConfig('SlideInterval', 600);   // seconds
+        d.writeConfig('FillMode', 2);
+        d.reloadConfig();
+    })" >/dev/null
+
 echo ":: konsole"
 kw konsolerc "Desktop Entry" DefaultProfile NickLab.profile
 

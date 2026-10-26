@@ -31,9 +31,11 @@ Gradient: `#2E6BFF → #3DFF9A`, left to right.
 | **NickKeys** (`Meta+/`) | Popup that searches every shortcut, with favorites pinned on top |
 | **kalango launcher** (`Meta+Space`, tap `Meta`) | Omarchy-style menu of openSUSE/KDE tools; a tap of Meta shows the main shortcuts |
 | **Top bar** | Slim bar on every monitor: notifications, CPU/RAM/network, audio, Wi-Fi, Bluetooth, battery, date and time. Replaces the Plasma panel |
+| **Wallpapers** | Three original calango drawings, crossfading every 10 minutes on every monitor |
 | **KRunner** (`Alt+Space`) | Search apps, files, settings, math |
 
-See [docs/shortcuts.md](docs/shortcuts.md) for the cheat sheet.
+See [docs/shortcuts.md](docs/shortcuts.md) for the cheat sheet, and
+[docs/software.md](docs/software.md) for everything kalango installs.
 
 ## Install
 
@@ -55,6 +57,7 @@ apply.sh     the exact KDE config keys kalango owns, written with kwriteconfig6
 install.sh   packages → files → fonts → krohnkite → borders → apply.sh
 scripts/     one installer per third-party piece
 patches/     kalango's changes to Krohnkite and KDE-Rounded-Corners
+wallpapers/  wallpaper sources (SVG), rendered to 4K PNGs at install
 packages.txt zypper packages
 ```
 

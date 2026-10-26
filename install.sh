@@ -28,6 +28,9 @@ echo ":: fonts"
 echo ":: krohnkite"
 "$REPO/scripts/install-krohnkite.sh"
 
+echo ":: wallpapers"
+"$REPO/scripts/install-wallpapers.sh"
+
 echo ":: borders"
 "$REPO/scripts/build-borders.sh"
 
