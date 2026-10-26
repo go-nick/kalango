@@ -21,6 +21,16 @@ Scope {
 
     function ic(cp) { return String.fromCodePoint(cp); }
     function kcm(name) { Quickshell.execDetached(["systemsettings", name]); }
+    function sysmon() { Quickshell.execDetached(["plasma-systemmonitor"]); }
+
+    // Load (0..1) along the kalango palette: blue idle -> neon busy -> solar heavy
+    function load(x) {
+        const mix = (a, b, t) => Qt.rgba(a.r + (b.r - a.r) * t, a.g + (b.g - a.g) * t,
+                                         a.b + (b.b - a.b) * t, 1);
+        // Blue is lightened a little to stay readable on the Pine islands
+        return x < 0.6 ? mix(Qt.lighter(Theme.blue, 1.4), Theme.neon, x / 0.6)
+                       : mix(Theme.neon, Theme.solar, Math.min(1, (x - 0.6) / 0.3));
+    }
 
     // Default sink must be tracked for its volume/mute to be live
     readonly property var sink: Pipewire.defaultAudioSink
@@ -34,6 +44,7 @@ Scope {
         property string icon
         property string label
         property color tint: Theme.text
+        property color labelTint: Theme.text
         signal scrolled(int delta)
 
         implicitWidth: row.implicitWidth + 12
@@ -57,13 +68,15 @@ Scope {
                 visible: mod.icon !== ""
                 text: mod.icon
                 color: mod.tint
+                Behavior on color { ColorAnimation { duration: 600 } }
                 font.pixelSize: 14
                 anchors.verticalCenter: parent.verticalCenter
             }
             Text {
                 visible: mod.label !== ""
                 text: mod.label
-                color: Theme.text
+                color: mod.labelTint
+                Behavior on color { ColorAnimation { duration: 600 } }
                 font.pixelSize: 12
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -120,11 +133,24 @@ Scope {
                 id: center
                 anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom }
 
+                // CPU and RAM take their color from their load
                 Module {
-                    label: `${bar.ic(0xF0EE0)} ${Math.round(Stats.cpu * 100)}%   `
-                         + `${bar.ic(0xF035B)} ${(Stats.ramUsed / 1024 ** 3).toFixed(1)}/${Math.round(Stats.ramTotal / 1024 ** 3)}G   `
-                         + `${bar.ic(0xF01DA)}${Stats.rate(Stats.down)} ${bar.ic(0xF0552)}${Stats.rate(Stats.up)}`
-                    onClicked: Quickshell.execDetached(["plasma-systemmonitor"])
+                    icon: bar.ic(0xF0EE0)
+                    label: Math.round(Stats.cpu * 100) + "%"
+                    tint: bar.load(Stats.cpu)
+                    labelTint: tint
+                    onClicked: bar.sysmon()
+                }
+                Module {
+                    icon: bar.ic(0xF035B)
+                    label: `${(Stats.ramUsed / 1024 ** 3).toFixed(1)}/${Math.round(Stats.ramTotal / 1024 ** 3)}G`
+                    tint: bar.load(Stats.ramTotal ? Stats.ramUsed / Stats.ramTotal : 0)
+                    labelTint: tint
+                    onClicked: bar.sysmon()
+                }
+                Module {
+                    label: `${bar.ic(0xF01DA)}${Stats.rate(Stats.down)} ${bar.ic(0xF0552)}${Stats.rate(Stats.up)}`
+                    onClicked: bar.sysmon()
                 }
 
                 // Battery: hidden on desktops without one
