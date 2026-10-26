@@ -8,6 +8,10 @@ kw() { kwriteconfig6 --file "$1" --group "$2" --key "$3" "$4"; }
 echo ":: colors"
 plasma-apply-colorscheme NickLab >/dev/null
 
+echo ":: icons"
+# Built by scripts/build-icons.py (Papirus-Dark + kalango folders); applies live
+/usr/libexec/plasma-changeicons kalango >/dev/null 2>&1
+
 echo ":: cursor"
 # Built by scripts/build-cursors.py; applies live
 plasma-apply-cursortheme kalango-cursors >/dev/null
