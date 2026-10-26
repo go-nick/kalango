@@ -50,6 +50,14 @@ kw kwinrc Plugins blurEnabled true
 kw kwinrc Effect-blur BlurStrength 3
 kw kwinrc Effect-blur NoiseStrength 2
 
+echo ":: top bar"
+# The kalango top bar (Quickshell) replaces Plasma's panels. Bring one back
+# any time: right-click the desktop > Add Panel.
+qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript \
+    'panels().forEach(p => p.remove())' >/dev/null
+# Notifications sit under the bar's bell until kalango has its own
+kw plasmanotifyrc Notifications PopupPosition TopLeft
+
 echo ":: konsole"
 kw konsolerc "Desktop Entry" DefaultProfile NickLab.profile
 
