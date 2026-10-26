@@ -54,11 +54,19 @@ Scope {
         cursorShape: Qt.PointingHandCursor
         onWheel: wheel => mod.scrolled(wheel.angleDelta.y)
 
+        // The bar's one gradient: a short blue -> green underline that grows
+        // under the hovered module
         Rectangle {
-            anchors.fill: parent
-            anchors.margins: 3
-            radius: 4
-            color: mod.containsMouse ? Qt.rgba(1, 1, 1, 0.08) : "transparent"
+            anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 3 }
+            width: mod.containsMouse ? row.implicitWidth : 0
+            height: 2
+            radius: 1
+            Behavior on width { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
+            gradient: Gradient {
+                orientation: Gradient.Horizontal
+                GradientStop { position: 0; color: Theme.blue }
+                GradientStop { position: 1; color: Theme.neon }
+            }
         }
         Row {
             id: row
