@@ -4,8 +4,10 @@
 inter-fonts
 nerdfonts-symbolsonly-fonts
 
-# renders the wallpaper SVGs
+# renders the wallpaper and cursor SVGs
 rsvg-convert
+# builds the classic Xcursor files of the kalango cursor theme
+xcursorgen
 
 # build tools for KDE-Rounded-Corners
 git

@@ -31,6 +31,9 @@ echo ":: krohnkite"
 echo ":: wallpapers"
 "$REPO/scripts/install-wallpapers.sh"
 
+echo ":: cursors"
+"$REPO/scripts/build-cursors.py"
+
 echo ":: borders"
 "$REPO/scripts/build-borders.sh"
 
