@@ -62,6 +62,10 @@ def main():
     accel.setForeignShortcutKeys(action_id, dbus.Array(
         [dbus.Struct([dbus.Array([dbus.Int32(c), 0, 0, 0], signature="i")]) for c in codes],
         signature="(ai)"))
+    # Shortcuts created through D-Bus start out inactive: kglobalaccel ignores their
+    # keys (only invokeShortcut works) until marked present. SetPresent without
+    # NoAutoloading keeps the stored keys we just set.
+    accel.setShortcutKeys(action_id, dbus.Array([], signature="(ai)"), dbus.UInt32(0x2))
 
     got = sorted(int(s[0][0]) for s in accel.shortcutKeys(action_id))
     if got != sorted(codes):
