@@ -1,7 +1,7 @@
 // kalango top bar — slim Omarchy-style panel on every monitor.
 //   left:   notifications (placeholder until kalango's own notifications land)
-//   center: CPU, RAM, network down/up (click opens System Monitor)
-//   right:  audio, Wi-Fi, Bluetooth, battery, date + time
+//   center: CPU, RAM, network down/up (click opens System Monitor), battery
+//   right:  audio, Wi-Fi, Bluetooth, date + time
 // Every module opens the matching KDE settings page on click, so mouse users
 // always have a way in.
 import QtQuick
@@ -111,13 +111,31 @@ Scope {
                 }
             }
 
-            // ── center ──
-            Module {
+            // ── center: system meters, battery at their right ──
+            RowLayout {
                 anchors.centerIn: parent
-                label: `${bar.ic(0xF0EE0)} ${Math.round(Stats.cpu * 100)}%   `
-                     + `${bar.ic(0xF035B)} ${(Stats.ramUsed / 1024 ** 3).toFixed(1)}/${Math.round(Stats.ramTotal / 1024 ** 3)}G   `
-                     + `${bar.ic(0xF01DA)}${Stats.rate(Stats.down)} ${bar.ic(0xF0552)}${Stats.rate(Stats.up)}`
-                onClicked: Quickshell.execDetached(["plasma-systemmonitor"])
+                spacing: 0
+
+                Module {
+                    label: `${bar.ic(0xF0EE0)} ${Math.round(Stats.cpu * 100)}%   `
+                         + `${bar.ic(0xF035B)} ${(Stats.ramUsed / 1024 ** 3).toFixed(1)}/${Math.round(Stats.ramTotal / 1024 ** 3)}G   `
+                         + `${bar.ic(0xF01DA)}${Stats.rate(Stats.down)} ${bar.ic(0xF0552)}${Stats.rate(Stats.up)}`
+                    onClicked: Quickshell.execDetached(["plasma-systemmonitor"])
+                }
+
+                // Battery: hidden on desktops without one
+                Module {
+                    readonly property var dev: UPower.displayDevice
+                    readonly property int pct: Math.round(dev.percentage * 100)
+                    readonly property bool charging: dev.state === UPowerDeviceState.Charging
+                                                  || dev.state === UPowerDeviceState.FullyCharged
+                    visible: dev.isLaptopBattery
+                    icon: charging ? bar.ic(0xF0084)
+                        : pct >= 95 ? bar.ic(0xF0079) : bar.ic(0xF007A + Math.max(0, Math.floor(pct / 10) - 1))
+                    tint: charging ? Theme.neon : pct <= 15 ? Theme.solar : Theme.text
+                    label: pct + "%"
+                    onClicked: bar.kcm("kcm_powerdevilprofilesconfig")
+                }
             }
 
             // ── right ──
@@ -166,20 +184,6 @@ Scope {
                         if (mouse.button === Qt.RightButton) adapter.enabled = !adapter.enabled;
                         else bar.kcm("kcm_bluetooth");
                     }
-                }
-
-                // Battery: hidden on desktops without one
-                Module {
-                    readonly property var dev: UPower.displayDevice
-                    readonly property int pct: Math.round(dev.percentage * 100)
-                    readonly property bool charging: dev.state === UPowerDeviceState.Charging
-                                                  || dev.state === UPowerDeviceState.FullyCharged
-                    visible: dev.isLaptopBattery
-                    icon: charging ? bar.ic(0xF0084)
-                        : pct >= 95 ? bar.ic(0xF0079) : bar.ic(0xF007A + Math.max(0, Math.floor(pct / 10) - 1))
-                    tint: charging ? Theme.neon : pct <= 15 ? Theme.solar : Theme.text
-                    label: pct + "%"
-                    onClicked: bar.kcm("kcm_powerdevilprofilesconfig")
                 }
 
                 // Date + time; click toggles the full date
