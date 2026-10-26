@@ -29,7 +29,8 @@ Gradient: `#2E6BFF → #3DFF9A`, left to right.
 | **KDE-Rounded-Corners** (patched) | 2px gradient border that slowly rotates on the active window |
 | **NickLab Konsole** | Translucent, blurred terminal with palette ANSI colors |
 | **NickKeys** (`Meta+/`) | Popup that searches every shortcut, with favorites pinned on top |
-| **KRunner** (`Meta+Space`) | Search apps, files, settings, math |
+| **kalango launcher** (`Meta+Space`, tap `Meta`) | Omarchy-style menu of openSUSE/KDE tools; a tap of Meta shows the main shortcuts |
+| **KRunner** (`Alt+Space`) | Search apps, files, settings, math |
 
 See [docs/shortcuts.md](docs/shortcuts.md) for the cheat sheet.
 
