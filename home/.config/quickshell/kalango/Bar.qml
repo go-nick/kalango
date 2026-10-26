@@ -115,7 +115,7 @@ Scope {
             Module {
                 anchors.centerIn: parent
                 label: `${bar.ic(0xF0EE0)} ${Math.round(Stats.cpu * 100)}%   `
-                     + `${bar.ic(0xF035B)} ${(Stats.ramUsed / 1024 ** 3).toFixed(1)}G   `
+                     + `${bar.ic(0xF035B)} ${(Stats.ramUsed / 1024 ** 3).toFixed(1)}/${Math.round(Stats.ramTotal / 1024 ** 3)}G   `
                      + `${bar.ic(0xF01DA)}${Stats.rate(Stats.down)} ${bar.ic(0xF0552)}${Stats.rate(Stats.up)}`
                 onClicked: Quickshell.execDetached(["plasma-systemmonitor"])
             }
