@@ -31,6 +31,7 @@ Gradient: `#2E6BFF → #3DFF9A`, left to right.
 | **NickKeys** (`Meta+/`) | Popup that searches every shortcut, with favorites pinned on top |
 | **kalango launcher** (`Meta+Space`, tap `Meta`) | Omarchy-style menu of openSUSE/KDE tools; a tap of Meta shows the main shortcuts |
 | **Top bar** | Slim bar on every monitor: notifications, CPU/RAM/network, audio, Wi-Fi, Bluetooth, battery, date and time. Replaces the Plasma panel |
+| **Icons and cursor** | Papirus-Dark with blue→green gradient folders; Breeze cursor with a neon outline |
 | **Wallpapers** | Three original calango drawings, crossfading every 10 minutes on every monitor |
 | **KRunner** (`Alt+Space`) | Search apps, files, settings, math |
 
