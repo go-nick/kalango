@@ -274,7 +274,14 @@ frame.right=4
 
 [MenuItem]
 inherits=PanelButtonCommand
-frame=false
+frame=true
+frame.element=menuitem
+frame.top=4
+frame.bottom=4
+frame.left=4
+frame.right=4
+text.press.color=#3DFF9A
+text.toggle.color=#3DFF9A
 interior.element=menuitem
 indicator.element=menuitem
 min_height=22
@@ -288,13 +295,16 @@ text.margin.right=3
 inherits=PanelButtonCommand
 interior.element=menubaritem
 frame.element=menubaritem
-frame.top=2
-frame.bottom=2
-frame.left=2
-frame.right=2
+frame.top=4
+frame.bottom=4
+frame.left=4
+frame.right=4
 text.margin.top=2
 text.margin.bottom=2
 
+text.focus.color=#3DFF9A
+text.press.color=#3DFF9A
+text.toggle.color=#3DFF9A
 [MenuBar]
 inherits=PanelButtonCommand
 frame.top=0
