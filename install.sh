@@ -43,7 +43,6 @@ echo ":: borders"
 echo ":: quickshell"
 "$REPO/scripts/build-quickshell.sh"
 
-echo ":: login screen (sudo)"
-"$REPO/scripts/install-login-theme.sh"
+# Login screen: not installed until #23 is fixed (scripts/install-login-theme.sh)
 
 "$REPO/apply.sh"
