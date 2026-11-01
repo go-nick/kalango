@@ -193,6 +193,10 @@ indicator.element=toolbar
 indicator.size=5
 frame.element=toolbar
 interior.element=toolbar
+frame.top=0
+frame.left=0
+frame.right=0
+frame.bottom=1
 
 [Slider]
 inherits=PanelButtonCommand
