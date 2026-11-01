@@ -3,7 +3,8 @@
 
 A small overlay theme. Every Papirus folder and place icon gets kalango's design,
 black glass with a glowing neon outline, keeping Papirus's symbol (documents, music,
-home, ...) recolored to neon. Everything else falls through to Papirus-Dark via
+home, ...) recolored to neon. Single-color interface icons (back, search, close, ...)
+turn neon too. Everything else falls through to Papirus-Dark via
 Inherits, so Papirus updates keep working.
 
 The glow is layered translucent lines, not an SVG filter, because icon renderers
@@ -56,6 +57,32 @@ def redraw(svg):
             f'{folder(size)}{symbols}</svg>')
 
 
+def neon_interface(dirs, papirus):
+    """Copy Papirus's single-color interface icons in neon.
+
+    KDE repaints the ColorScheme-Text class with the color scheme's text color, so the
+    class is renamed. Warning colors (ColorScheme-Negative*, ...) stay as they are.
+    """
+    dark = INDEX.parent
+    for source in sorted([*dark.glob("*/actions"), *dark.glob("*/symbolic/*")]):
+        name = str(source.relative_to(dark))
+        if not papirus.has_section(name) or not source.is_dir():
+            continue
+        out = DST / name
+        for icon in source.iterdir():
+            if icon.suffix != ".svg" or not icon.exists():
+                continue
+            text = icon.read_text()
+            if "ColorScheme-Text" not in text:
+                continue
+            text = re.sub(r"\.ColorScheme-Text\s*\{\s*color:\s*#[0-9a-fA-F]+",
+                          f".KalangoIcon {{ color:{NEON}", text)
+            out.mkdir(parents=True, exist_ok=True)
+            (out / icon.name).write_text(text.replace("ColorScheme-Text", "KalangoIcon"))
+        if out.exists() and name not in dirs:
+            dirs.append(name)
+
+
 def main():
     if DST.exists():
         shutil.rmtree(DST)
@@ -87,6 +114,8 @@ def main():
             (out / icon.name).write_text(redraw(text))
         if out.exists() and papirus.has_section(name):
             dirs.append(name)
+
+    neon_interface(dirs, papirus)
 
     theme = configparser.ConfigParser(interpolation=None)
     theme.optionxform = str
