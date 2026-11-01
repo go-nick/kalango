@@ -29,6 +29,8 @@ for k in screenGapLeft screenGapRight screenGapTop screenGapBottom screenGapBetw
 done
 kw kwinrc Script-krohnkite noTileBorder true
 kw kwinrc Script-krohnkite floatingTitle NickKeys
+# Monocle fills the tiling area (gaps, bar, border stay); F11 is the real fullscreen
+kw kwinrc Script-krohnkite monocleMaximize false
 # KWin's own edge snapping fights the tiler
 kw kwinrc Windows ElectricBorderMaximize false
 kw kwinrc Windows ElectricBorderTiling false
@@ -101,6 +103,7 @@ ks kalango-hints.desktop _launch Meta                      # lone Meta tap: hint
 ks org.kde.plasma-systemmonitor.desktop _launch Ctrl+Escape # frees Meta+Escape
 ks ksmserver "Lock Session" Screensaver Meta+Escape        # frees Meta+L for Krohnkite
 ks kwin "Window Close" Alt+F4 Meta+Q
+ks kwin "Window Fullscreen" F11
 ks nickkeys.desktop _launch Meta+/
 
 echo ":: window rules"
