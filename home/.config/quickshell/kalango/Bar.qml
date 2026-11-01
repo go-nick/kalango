@@ -18,6 +18,7 @@ Scope {
 
     readonly property int height: 26    // one island
     readonly property int gap: 4        // space above the islands
+    readonly property int glow: 8       // room under the islands for their glow
     // Every module uses the same sizes
     readonly property int iconSize: 19
     readonly property int labelSize: 13
@@ -146,6 +147,26 @@ Scope {
         implicitHeight: bar.height
         radius: height / 2
         color: Theme.island
+
+        // Soft blue -> green glow below the pill: stacked translucent pills
+        Repeater {
+            model: [[7, 0.05], [5, 0.08], [3, 0.12], [1, 0.2]]
+            Rectangle {
+                required property var modelData
+                z: -1
+                x: -modelData[0]
+                y: modelData[0] + 1
+                width: parent.width + modelData[0] * 2
+                height: parent.height
+                radius: height / 2
+                opacity: modelData[1]
+                gradient: Gradient {
+                    orientation: Gradient.Horizontal
+                    GradientStop { position: 0; color: Theme.blue }
+                    GradientStop { position: 1; color: Theme.neon }
+                }
+            }
+        }
         RowLayout {
             id: modules
             anchors.centerIn: parent
@@ -162,7 +183,11 @@ Scope {
             screen: modelData
 
             anchors { top: true; left: true; right: true }
-            implicitHeight: bar.gap + bar.height
+            implicitHeight: bar.gap + bar.height + bar.glow
+            // Only the bar reserves space and takes clicks; the glow below it doesn't
+            exclusionMode: ExclusionMode.Normal
+            exclusiveZone: bar.gap + bar.height
+            mask: Region { item: zone }
             color: "transparent"
             WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.namespace: "kalango-bar"
@@ -173,9 +198,16 @@ Scope {
                 Region { item: right; radius: right.radius }
             }
 
+            Item {
+                id: zone
+                anchors { left: parent.left; right: parent.right; top: parent.top }
+                height: bar.gap + bar.height
+            }
+
             // The screen corner belongs to the bell: throw the mouse up-left and click
             MouseArea {
-                anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
+                anchors { left: parent.left; top: parent.top }
+                height: zone.height
                 width: left.x + 4 + bell.width
                 acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
                 cursorShape: Qt.PointingHandCursor
@@ -185,7 +217,7 @@ Scope {
             // ── left ──
             Island {
                 id: left
-                anchors { left: parent.left; leftMargin: 10; bottom: parent.bottom }
+                anchors { left: parent.left; leftMargin: 10; top: parent.top; topMargin: bar.gap }
 
                 // Bell: unread count, DND state. Any click opens the notification list;
                 // Do not disturb and settings live inside it
@@ -213,7 +245,7 @@ Scope {
             // ── center: system meters, battery at their right ──
             Island {
                 id: center
-                anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom }
+                anchors { horizontalCenter: parent.horizontalCenter; top: parent.top; topMargin: bar.gap }
 
                 // CPU and RAM take their color from their load
                 Module {
@@ -259,7 +291,7 @@ Scope {
             // ── right ──
             Island {
                 id: right
-                anchors { right: parent.right; rightMargin: 10; bottom: parent.bottom }
+                anchors { right: parent.right; rightMargin: 10; top: parent.top; topMargin: bar.gap }
 
                 // Keyboard layout: click opens a menu of the configured layouts,
                 // scroll cycles them, right-click opens keyboard settings
