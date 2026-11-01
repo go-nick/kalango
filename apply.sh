@@ -20,7 +20,7 @@ echo ":: app style"
 # Kvantum replaces Breeze as the style of every Qt app. Back to Breeze:
 # kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Breeze
 # Glass: how solid app backgrounds are, in one place for every app (Kvantum and Konsole)
-APP_OPACITY=60
+APP_OPACITY=50
 kw kdeglobals KDE widgetStyle kvantum
 sed -i "s/^reduce_window_opacity=.*/reduce_window_opacity=$((100 - APP_OPACITY))/" "$HOME/.config/Kvantum/kalango/kalango.kvconfig"
 kw "$HOME/.local/share/konsole/NickLab.colorscheme" General Opacity "$(awk "BEGIN { print $APP_OPACITY / 100 }")"
@@ -67,7 +67,7 @@ echo ":: open/close animation"
 
 echo ":: blur"
 kw kwinrc Plugins blurEnabled true
-kw kwinrc Effect-blur BlurStrength 3
+kw kwinrc Effect-blur BlurStrength 4
 kw kwinrc Effect-blur NoiseStrength 2
 
 echo ":: top bar"
