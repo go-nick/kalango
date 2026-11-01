@@ -16,6 +16,12 @@ echo ":: cursor"
 # Built by scripts/build-cursors.py; applies live
 plasma-apply-cursortheme kalango-cursors >/dev/null
 
+echo ":: app style"
+# Kvantum replaces Breeze as the style of every Qt app. Back to Breeze:
+# kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Breeze
+kw kdeglobals KDE widgetStyle kvantum
+dbus-send --session --type=signal /KGlobalSettings org.kde.KGlobalSettings.notifyChange int32:2 int32:0
+
 echo ":: fonts"
 "$HOME/.local/bin/nickfont" "JetBrainsMono Nerd Font" 10 >/dev/null
 kw kdeglobals General XftAntialias true
