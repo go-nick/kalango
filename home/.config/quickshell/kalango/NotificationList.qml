@@ -27,6 +27,7 @@ Scope {
         function notificationsToggleDnd(): void { Notifications.toggleDnd(); }
         function notificationsMarkAllRead(): void { Notifications.markAllRead(); }
         function notificationsClearAll(): void { Notifications.clearAll(); }
+        function notificationsToggleSounds(): void { Notifications.toggleSounds(); }
         function notificationsUnread(): int { return Notifications.unread; }
     }
 
@@ -146,6 +147,11 @@ Scope {
                             label: "Clear all"
                             enabled: Notifications.entries.length > 0
                             onClicked: Notifications.clearAll()
+                        }
+                        HeaderButton {
+                            icon: Notifications.sounds ? 0xF057E : 0xF075F    // volume / mute
+                            label: Notifications.sounds ? "Sound on" : "Sound off"
+                            onClicked: Notifications.toggleSounds()
                         }
                         Item { Layout.fillWidth: true }
                     }

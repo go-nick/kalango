@@ -50,7 +50,8 @@ Directional focus only moves if a window exists on that side.
 | Keys | Action |
 |---|---|
 | Meta + T | Tile layout (default: one big window + a stack) |
-| Meta + M | Monocle: one window fills the screen, the others hide behind it |
+| Meta + M | Monocle: one window fills the tiling area (gaps and top bar stay), the others hide behind it |
+| F11 | Fullscreen: the window covers the whole screen, top bar included |
 | Meta + \ | Next layout |
 | Meta + \| | Previous layout |
 

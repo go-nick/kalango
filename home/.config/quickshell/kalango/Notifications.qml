@@ -4,10 +4,15 @@
 //   popups: shown under the bell for a few seconds; critical ones stay until handled
 //   dnd:    popups are muted (except critical); notifications still land in the list
 // An update from the same app (e.g. a download's progress) changes the same entry.
+// History survives logout in ~/.local/state/kalango/notifications.json (private folder,
+// newest 200). Restored entries keep their text and read state, but the app's buttons
+// are gone with its connection.
+// Sounds: normal and critical popups only, muted with DND, low priority or the Sound button.
 pragma Singleton
 
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import Quickshell.Services.Notifications
 
 Singleton {
@@ -46,7 +51,19 @@ Singleton {
     function isCritical(n) { return n.urgency === NotificationUrgency.Critical; }
 
     function add(n) {
+        restore();
         const entry = { key: n.id, n: n, time: new Date(), read: false, popup: !dnd || isCritical(n) };
+        // After a hot reload the server hands back live notifications we also restored
+        if (n.lastGeneration) {
+            const copy = entries.find(e => e.restored && e.n.appName === n.appName
+                                      && e.n.summary === n.summary && e.n.body === n.body);
+            if (copy) {
+                entry.time = copy.time;
+                entry.read = copy.read;
+                entries = entries.filter(e => e !== copy);
+            }
+            entry.popup = false;
+        }
         n.closed.connect(() => { entries = entries.filter(e => e !== entry); });
         // New text from the same notification is news again: unread, on top, popped up
         const renew = () => {
@@ -55,10 +72,86 @@ Singleton {
             entry.popup = !dnd || isCritical(n);
             entries = [entry].concat(entries.filter(e => e !== entry));
         };
+        if (entry.popup && !n.lastGeneration) playSound(n);
         n.summaryChanged.connect(renew);
         n.bodyChanged.connect(renew);
-        entries = [entry].concat(entries);
+        entries = [entry].concat(entries).sort((a, b) => b.time - a.time);
     }
+
+    // ── sounds ──
+    property bool sounds: true
+    onSoundsChanged: if (restored) saver.restart()
+    function toggleSounds() { sounds = !sounds; }
+    property real lastSound: 0
+
+    // Apps can ask for silence or name their own sound (sound-file, sound-name)
+    function playSound(n) {
+        if (!sounds || n.urgency === NotificationUrgency.Low || n.hints["suppress-sound"]) return;
+        // A burst of notifications makes one sound, not ten
+        if (Date.now() - lastSound < 500) return;
+        lastSound = Date.now();
+        const ocean = name => `/usr/share/sounds/ocean/stereo/${name}.oga`;
+        const fallback = ocean(isCritical(n) ? "dialog-warning" : "message-new-instant");
+        const wanted = String(n.hints["sound-file"] || "").replace(/^file:\/\//, "")
+                       || (n.hints["sound-name"] ? ocean(n.hints["sound-name"]) : fallback);
+        Quickshell.execDetached(["sh", "-c", '[ -f "$1" ] && exec pw-play "$1"; exec pw-play "$2"',
+                                 "sh", wanted, fallback]);
+    }
+
+    // ── history on disk ──
+    readonly property string stateDir: (Quickshell.env("XDG_STATE_HOME")
+                                        || Quickshell.env("HOME") + "/.local/state") + "/kalango"
+    property bool restored: false
+    onEntriesChanged: if (restored) saver.restart()
+
+    function restore() {
+        if (restored) return;
+        restored = true;
+        Quickshell.execDetached(["mkdir", "-pm", "700", stateDir]);
+        try {
+            const saved = JSON.parse(history.text());
+            sounds = saved.sounds !== false;
+            entries = saved.notifications.map(fromDisk);
+        } catch (e) {
+            // No history yet, or an unreadable file: start empty
+        }
+    }
+
+    // Stands in for a live Notification, with the fields NotificationCard reads
+    function fromDisk(s, i) {
+        const entry = { key: `saved-${i}-${s.time}`, time: new Date(s.time), read: s.read,
+                        popup: false, restored: true };
+        entry.n = { appName: s.appName, appIcon: s.appIcon, desktopEntry: s.desktopEntry,
+                    summary: s.summary, body: s.body, urgency: s.urgency, image: s.image,
+                    actions: [], hints: {}, hasInlineReply: false, inlineReplyPlaceholder: "",
+                    transient: false,
+                    dismiss: () => { entries = entries.filter(e => e !== entry); } };
+        return entry;
+    }
+
+    function save() {
+        // image:// URLs only exist in this process; files and icon names outlive it
+        const lasting = url => url && url.includes("image://") ? "" : url;
+        history.setText(JSON.stringify({
+            sounds: sounds,
+            notifications: entries.filter(e => !e.n.transient).slice(0, 200).map(e => ({
+                appName: e.n.appName, appIcon: lasting(e.n.appIcon), desktopEntry: e.n.desktopEntry,
+                summary: e.n.summary, body: e.n.body, urgency: e.n.urgency,
+                image: lasting(e.n.image), time: e.time.toISOString(), read: e.read,
+            })),
+        }));
+    }
+
+    FileView {
+        id: history
+        path: root.stateDir + "/notifications.json"
+        blockLoading: true
+        blockWrites: true
+        printErrors: false
+    }
+    Timer { id: saver; interval: 500; onTriggered: root.save() }
+    Component.onCompleted: restore()
+    Component.onDestruction: if (saver.running) save()
 
     function hidePopup(entry) {
         entry.popup = false;

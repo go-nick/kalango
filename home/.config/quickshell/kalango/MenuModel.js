@@ -116,7 +116,7 @@ function build(allApps) {
                     { label: "Clipboard History", icon: "klipper", hint: "Klipper (clipboard in the system tray)", run: { cmd: ["qdbus6", "org.kde.klipper", "/klipper", "org.kde.klipper.klipper.showKlipperPopupMenu"] } },
                     { label: "Emoji", icon: "preferences-desktop-emoticons", hint: "Emoji Selector (plasma-emojier)", run: { cmd: ["plasma-emojier"] } },
                     { label: "Night Light", icon: "redshift-status-on", hint: "Toggle · settings in System Settings › Night Light", run: { shortcut: ["kwin", "Toggle Night Color"] } },
-                    { label: "Do Not Disturb", icon: "notifications-disabled", hint: "Toggle · settings in System Settings › Notifications", run: { shortcut: ["plasmashell", "toggle do not disturb"] } },
+                    { label: "Do Not Disturb", icon: "notifications-disabled", hint: "Toggle · also a button in the notification list", run: { cmd: ["~/.local/bin/qs", "-c", "kalango", "ipc", "call", "notifications", "notificationsToggleDnd"] } },
                 ],
             },
             {
@@ -187,7 +187,7 @@ function hints() {
         { label: "Make Main Window", glyph: g(0xF0E45), keys: "Meta + Return", hint: "Tiling: move to the big area", run: kwin("KrohnkiteSetMaster") },
         { label: "Float / Unfloat Window", glyph: g(0xF0B19), keys: "Meta + F", hint: "Tiling: free placement with the mouse", run: kwin("KrohnkiteToggleFloat") },
         { label: "Float / Unfloat All", glyph: g(0xF1009), keys: "Meta + Shift + F", hint: "Tiling: quick normal-desktop mode", run: kwin("KrohnkiteFloatAll") },
-        { label: "Monocle", glyph: g(0xF0293), keys: "Meta + M", hint: "Tiling: one window fills the screen", run: kwin("KrohnkiteMonocleLayout") },
+        { label: "Monocle", glyph: g(0xF0293), keys: "Meta + M", hint: "Tiling: one window fills the tiling area, gaps and bar stay", run: kwin("KrohnkiteMonocleLayout") },
         { label: "Close Window", glyph: g(0xF05AD), keys: "Meta + Q", hint: "Closes the window, not always the app", run: kwin("Window Close") },
         { label: "Overview", glyph: g(0xF0568), keys: "Meta + W", hint: "All windows and desktops", run: kwin("Overview") },
         { label: "Lock Screen", glyph: g(0xF033E), keys: "Meta + Esc", hint: "Lock the session", run: { shortcut: ["ksmserver", "Lock Session"] } },

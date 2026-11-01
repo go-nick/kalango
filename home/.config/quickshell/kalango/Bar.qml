@@ -18,6 +18,9 @@ Scope {
 
     readonly property int height: 26    // one island
     readonly property int gap: 4        // space above the islands
+    // Every module uses the same sizes
+    readonly property int iconSize: 19
+    readonly property int labelSize: 13
 
     function ic(cp) { return String.fromCodePoint(cp); }
     function kcm(name) { Quickshell.execDetached(["systemsettings", name]); }
@@ -45,9 +48,11 @@ Scope {
         property string label
         property color tint: Theme.text
         property color labelTint: Theme.text
+        property bool labelBold: false
+        property int padding: 14
         signal scrolled(int delta)
 
-        implicitWidth: row.implicitWidth + 12
+        implicitWidth: row.implicitWidth + padding
         implicitHeight: bar.height
         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
         hoverEnabled: true
@@ -77,7 +82,7 @@ Scope {
                 text: mod.icon
                 color: mod.tint
                 Behavior on color { ColorAnimation { duration: 600 } }
-                font.pixelSize: 14
+                font.pixelSize: bar.iconSize
                 anchors.verticalCenter: parent.verticalCenter
             }
             Text {
@@ -85,7 +90,8 @@ Scope {
                 text: mod.label
                 color: mod.labelTint
                 Behavior on color { ColorAnimation { duration: 600 } }
-                font.pixelSize: 12
+                font.pixelSize: bar.labelSize
+                font.bold: mod.labelBold
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -167,26 +173,33 @@ Scope {
                 Region { item: right; radius: right.radius }
             }
 
+            // The screen corner belongs to the bell: throw the mouse up-left and click
+            MouseArea {
+                anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
+                width: left.x + 4 + bell.width
+                acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+                cursorShape: Qt.PointingHandCursor
+                onClicked: Notifications.toggleList()
+            }
+
             // ── left ──
             Island {
                 id: left
                 anchors { left: parent.left; leftMargin: 10; bottom: parent.bottom }
 
-                // Bell: unread count, DND state. Click opens the notification list,
-                // right-click toggles Do not disturb, middle-click opens KDE's
-                // per-app notification settings
+                // Bell: unread count, DND state. Any click opens the notification list;
+                // Do not disturb and settings live inside it
                 Module {
+                    id: bell
+                    labelBold: true
+                    padding: 24
                     icon: Notifications.dnd ? bar.ic(0xF009B)            // bell-off
                         : Notifications.unread > 0 ? bar.ic(0xF009E)     // bell-ring
                         : bar.ic(0xF009A)                                // bell
                     tint: Notifications.dnd ? Theme.solar : Notifications.unread > 0 ? Theme.neon : Theme.text
                     label: Notifications.unread > 0 ? Notifications.unread : ""
                     labelTint: tint
-                    onClicked: mouse => {
-                        if (mouse.button === Qt.RightButton) Notifications.toggleDnd();
-                        else if (mouse.button === Qt.MiddleButton) bar.kcm("kcm_notifications");
-                        else Notifications.toggleList();
-                    }
+                    onClicked: Notifications.toggleList()
                 }
 
                 // Date + time, next to the notifications; click toggles the full date
@@ -218,7 +231,13 @@ Scope {
                     onClicked: bar.sysmon()
                 }
                 Module {
-                    label: `${bar.ic(0xF01DA)}${Stats.rate(Stats.down)} ${bar.ic(0xF0552)}${Stats.rate(Stats.up)}`
+                    icon: bar.ic(0xF01DA)    // download
+                    label: Stats.rate(Stats.down)
+                    onClicked: bar.sysmon()
+                }
+                Module {
+                    icon: bar.ic(0xF0552)    // upload
+                    label: Stats.rate(Stats.up)
                     onClicked: bar.sysmon()
                 }
 
