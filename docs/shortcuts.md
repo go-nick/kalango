@@ -1,4 +1,4 @@
-# NickLab — shortcuts cheat sheet
+# kalango — shortcuts cheat sheet
 
 **Meta** = the Windows/Super key.
 Windows tile automatically (Krohnkite). The mouse still works for everything.
@@ -10,7 +10,7 @@ Windows tile automatically (Krohnkite). The mouse still works for everything.
 | **Meta** (tap) | Hints: the main Meta shortcuts, runnable (type to search) |
 | **Meta + Space** | kalango menu: apps, settings, YaST, capture, power (type to search) |
 | Alt + Space | KRunner: search files, settings, math |
-| **Meta + /** | NickKeys: search every shortcut on the system |
+| **Meta + /** | Kalango Keys: search every shortcut on the system |
 
 ## Mouse (works as usual)
 
@@ -70,17 +70,17 @@ Directional focus only moves if a window exists on that side.
 | Ctrl + Escape | System Monitor |
 | Meta + Ctrl + Esc | Force-kill a frozen window (click it) |
 
-## NickLab tools
+## kalango tools
 
 | Command | What it does |
 |---|---|
-| `nickkeys` | Same shortcut list in the terminal (`nickkeys --print \| grep Tiling`) |
-| `nickfont` | Pick a Nerd Font for the whole UI (live). `nickfont "GeistMono Nerd Font" 11` sets one directly |
-| `nickborders-rebuild` | Run if the gradient borders vanish after a Plasma update (`zypper dup`), then log out/in |
+| `kalango-keys` | Same shortcut list in the terminal (`kalango-keys --print \| grep Tiling`) |
+| `kalango-font` | Pick a Nerd Font for the whole UI (live). `kalango-font "GeistMono Nerd Font" 11` sets one directly |
+| `kalango-borders-rebuild` | Run if the gradient borders vanish after a Plasma update (`zypper dup`), then log out/in |
 
 ## Where to tweak things
 
 - **Shortcuts:** System Settings → Keyboard → Shortcuts → search "Krohnkite"
 - **Gaps / tiling options:** System Settings → Window Management → KWin Scripts → Krohnkite ⚙
 - **Borders / corners:** System Settings → Window Management → Desktop Effects → Rounded Corners ⚙
-- **Colors:** System Settings → Colors → NickLab
+- **Colors:** System Settings → Colors → kalango
