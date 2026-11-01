@@ -27,9 +27,10 @@ Windows tile automatically (Krohnkite). The mouse still works for everything.
 | Keys | Action |
 |---|---|
 | Meta + H / J / K / L | Focus left / down / up / right |
-| Meta + . / Meta + , | Focus next / previous window (no need to think about direction) |
 | Alt + Tab | Classic window switcher |
 | Meta + W | Overview of all windows and desktops |
+| Meta + . | Emoji picker |
+| Meta + , | System Settings |
 
 Directional focus only moves if a window exists on that side.
 
