@@ -116,7 +116,7 @@ function build(allApps) {
                     { label: "Clipboard History", icon: "klipper", hint: "Klipper (clipboard in the system tray)", run: { cmd: ["qdbus6", "org.kde.klipper", "/klipper", "org.kde.klipper.klipper.showKlipperPopupMenu"] } },
                     { label: "Emoji", icon: "preferences-desktop-emoticons", hint: "Emoji Selector (plasma-emojier)", run: { cmd: ["plasma-emojier"] } },
                     { label: "Night Light", icon: "redshift-status-on", hint: "Toggle · settings in System Settings › Night Light", run: { shortcut: ["kwin", "Toggle Night Color"] } },
-                    { label: "Do Not Disturb", icon: "notifications-disabled", hint: "Toggle · also a right-click on the bell", run: { cmd: ["~/.local/bin/qs", "-c", "kalango", "ipc", "call", "notifications", "notificationsToggleDnd"] } },
+                    { label: "Do Not Disturb", icon: "notifications-disabled", hint: "Toggle · also a button in the notification list", run: { cmd: ["~/.local/bin/qs", "-c", "kalango", "ipc", "call", "notifications", "notificationsToggleDnd"] } },
                 ],
             },
             {

@@ -45,9 +45,12 @@ Scope {
         property string label
         property color tint: Theme.text
         property color labelTint: Theme.text
+        property int iconSize: 14
+        property int labelSize: 12
+        property int padding: 12
         signal scrolled(int delta)
 
-        implicitWidth: row.implicitWidth + 12
+        implicitWidth: row.implicitWidth + padding
         implicitHeight: bar.height
         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
         hoverEnabled: true
@@ -77,7 +80,7 @@ Scope {
                 text: mod.icon
                 color: mod.tint
                 Behavior on color { ColorAnimation { duration: 600 } }
-                font.pixelSize: 14
+                font.pixelSize: mod.iconSize
                 anchors.verticalCenter: parent.verticalCenter
             }
             Text {
@@ -85,7 +88,8 @@ Scope {
                 text: mod.label
                 color: mod.labelTint
                 Behavior on color { ColorAnimation { duration: 600 } }
-                font.pixelSize: 12
+                font.pixelSize: mod.labelSize
+                font.bold: mod.labelSize > 12
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -167,26 +171,34 @@ Scope {
                 Region { item: right; radius: right.radius }
             }
 
+            // The screen corner belongs to the bell: throw the mouse up-left and click
+            MouseArea {
+                anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
+                width: left.x + 4 + bell.width
+                acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+                cursorShape: Qt.PointingHandCursor
+                onClicked: Notifications.toggleList()
+            }
+
             // ── left ──
             Island {
                 id: left
                 anchors { left: parent.left; leftMargin: 10; bottom: parent.bottom }
 
-                // Bell: unread count, DND state. Click opens the notification list,
-                // right-click toggles Do not disturb, middle-click opens KDE's
-                // per-app notification settings
+                // Bell: unread count, DND state. Any click opens the notification list;
+                // Do not disturb and settings live inside it
                 Module {
+                    id: bell
+                    iconSize: 19
+                    labelSize: 13
+                    padding: 24
                     icon: Notifications.dnd ? bar.ic(0xF009B)            // bell-off
                         : Notifications.unread > 0 ? bar.ic(0xF009E)     // bell-ring
                         : bar.ic(0xF009A)                                // bell
                     tint: Notifications.dnd ? Theme.solar : Notifications.unread > 0 ? Theme.neon : Theme.text
                     label: Notifications.unread > 0 ? Notifications.unread : ""
                     labelTint: tint
-                    onClicked: mouse => {
-                        if (mouse.button === Qt.RightButton) Notifications.toggleDnd();
-                        else if (mouse.button === Qt.MiddleButton) bar.kcm("kcm_notifications");
-                        else Notifications.toggleList();
-                    }
+                    onClicked: Notifications.toggleList()
                 }
 
                 // Date + time, next to the notifications; click toggles the full date
