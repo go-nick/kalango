@@ -8,6 +8,7 @@ kw() { kwriteconfig6 --file "$1" --group "$2" --key "$3" "$4"; }
 echo ":: global theme"
 # Registers kalango in System Settings > Global Theme and as the current theme
 kw kdeglobals KDE LookAndFeelPackage org.kalango.desktop
+plasma-apply-desktoptheme kalango >/dev/null
 
 echo ":: colors"
 plasma-apply-colorscheme NickLab >/dev/null
