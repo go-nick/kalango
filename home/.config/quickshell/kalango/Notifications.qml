@@ -7,6 +7,7 @@
 // History survives logout in ~/.local/state/kalango/notifications.json (private folder,
 // newest 200). Restored entries keep their text and read state, but the app's buttons
 // are gone with its connection.
+// Sounds: normal and critical popups only, muted with DND, low priority or the Sound button.
 pragma Singleton
 
 import QtQuick
@@ -71,9 +72,30 @@ Singleton {
             entry.popup = !dnd || isCritical(n);
             entries = [entry].concat(entries.filter(e => e !== entry));
         };
+        if (entry.popup && !n.lastGeneration) playSound(n);
         n.summaryChanged.connect(renew);
         n.bodyChanged.connect(renew);
         entries = [entry].concat(entries).sort((a, b) => b.time - a.time);
+    }
+
+    // ── sounds ──
+    property bool sounds: true
+    onSoundsChanged: if (restored) saver.restart()
+    function toggleSounds() { sounds = !sounds; }
+    property real lastSound: 0
+
+    // Apps can ask for silence or name their own sound (sound-file, sound-name)
+    function playSound(n) {
+        if (!sounds || n.urgency === NotificationUrgency.Low || n.hints["suppress-sound"]) return;
+        // A burst of notifications makes one sound, not ten
+        if (Date.now() - lastSound < 500) return;
+        lastSound = Date.now();
+        const ocean = name => `/usr/share/sounds/ocean/stereo/${name}.oga`;
+        const fallback = ocean(isCritical(n) ? "dialog-warning" : "message-new-instant");
+        const wanted = String(n.hints["sound-file"] || "").replace(/^file:\/\//, "")
+                       || (n.hints["sound-name"] ? ocean(n.hints["sound-name"]) : fallback);
+        Quickshell.execDetached(["sh", "-c", '[ -f "$1" ] && exec pw-play "$1"; exec pw-play "$2"',
+                                 "sh", wanted, fallback]);
     }
 
     // ── history on disk ──
@@ -87,7 +109,9 @@ Singleton {
         restored = true;
         Quickshell.execDetached(["mkdir", "-pm", "700", stateDir]);
         try {
-            entries = JSON.parse(history.text()).notifications.map(fromDisk);
+            const saved = JSON.parse(history.text());
+            sounds = saved.sounds !== false;
+            entries = saved.notifications.map(fromDisk);
         } catch (e) {
             // No history yet, or an unreadable file: start empty
         }
@@ -109,6 +133,7 @@ Singleton {
         // image:// URLs only exist in this process; files and icon names outlive it
         const lasting = url => url && url.includes("image://") ? "" : url;
         history.setText(JSON.stringify({
+            sounds: sounds,
             notifications: entries.filter(e => !e.n.transient).slice(0, 200).map(e => ({
                 appName: e.n.appName, appIcon: lasting(e.n.appIcon), desktopEntry: e.n.desktopEntry,
                 summary: e.n.summary, body: e.n.body, urgency: e.n.urgency,
