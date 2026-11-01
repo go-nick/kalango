@@ -12,6 +12,9 @@ rsvg-convert
 # builds the classic Xcursor files of the kalango cursor theme
 xcursorgen
 
+# dbus-monitor: the top bar follows keyboard layout changes
+dbus-1-tools
+
 # build tools for KDE-Rounded-Corners
 git
 cmake
