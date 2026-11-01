@@ -11,7 +11,7 @@ kw kdeglobals KDE LookAndFeelPackage org.kalango.desktop
 plasma-apply-desktoptheme kalango >/dev/null
 
 echo ":: colors"
-plasma-apply-colorscheme NickLab >/dev/null
+plasma-apply-colorscheme kalango >/dev/null
 
 echo ":: icons"
 # Built by scripts/build-icons.py (Papirus-Dark + kalango folders); applies live

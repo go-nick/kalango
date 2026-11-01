@@ -1,4 +1,4 @@
-# NickLab — flat dark scheme in the spirit of Omarchy
+# kalango — flat dark scheme in the spirit of Omarchy
 # Void #0A0F14 bg · Neon green #3DFF9A primary · Electric blue #2E6BFF secondary
 # Solar yellow #FFD23F accent · Pine #0C322C panels · Brazil blue #002776 deep panels
 # SUSE green #30BA78 soft · Text #E6F1EC
@@ -136,8 +136,8 @@ ForegroundPositive=48,186,120
 ForegroundVisited=130,165,255
 
 [General]
-ColorScheme=NickLab
-Name=NickLab
+ColorScheme=kalango
+Name=kalango
 shadeSortColumn=true
 
 [KDE]
