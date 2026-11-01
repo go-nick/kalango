@@ -1,0 +1,24 @@
+# kalango's look. Tiling, borders, the top bar and shortcuts are not part of a global
+# theme: apply.sh owns them. There is deliberately no [Wallpaper] and no layout script,
+# so applying this keeps the wallpaper slideshow and doesn't bring a panel back.
+[kdeglobals][KDE]
+widgetStyle=kvantum
+
+[kdeglobals][General]
+ColorScheme=NickLab
+
+[kdeglobals][Icons]
+Theme=kalango
+
+[plasmarc][Theme]
+name=default
+
+[kcminputrc][Mouse]
+cursorTheme=kalango-cursors
+
+[kwinrc][org.kde.kdecoration2]
+library=org.kde.breeze
+theme=Breeze
+
+[ksplashrc][KSplash]
+Theme=org.kde.breeze.desktop
