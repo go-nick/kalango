@@ -17,7 +17,7 @@ echo ":: cursor"
 plasma-apply-cursortheme kalango-cursors >/dev/null
 
 echo ":: fonts"
-"$HOME/.local/bin/nickfont" "FiraCode Nerd Font" 10 >/dev/null
+"$HOME/.local/bin/nickfont" "JetBrainsMono Nerd Font" 10 >/dev/null
 kw kdeglobals General XftAntialias true
 kw kdeglobals General XftHintStyle hintslight
 kw kdeglobals General XftSubPixel rgb
