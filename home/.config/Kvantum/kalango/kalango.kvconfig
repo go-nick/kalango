@@ -165,10 +165,10 @@ text.margin.left=8
 text.margin.right=8
 frame.element=tab
 indicator.element=tab
-frame.top=2
-frame.bottom=2
-frame.left=2
-frame.right=2
+frame.top=4
+frame.bottom=4
+frame.left=4
+frame.right=4
 
 [TabFrame]
 inherits=PanelButtonCommand
