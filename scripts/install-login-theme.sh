@@ -20,6 +20,7 @@ sudo install -m 644 "$HOME"/.local/share/fonts/NerdFonts/JetBrainsMono/JetBrains
 sudo fc-cache -f "$FONTS"
 sudo cp -r --no-preserve=ownership "$HOME/.icons/kalango-cursors" "$CURSORS"
 sudo chmod -R a+rX "$CURSORS"
-printf '[Theme]\nCurrent=kalango\nCursorTheme=kalango-cursors\n' \
+# InputMethod: SDDM defaults to the on-screen keyboard, which would open over the card
+printf '[General]\nInputMethod=\n\n[Theme]\nCurrent=kalango\nCursorTheme=kalango-cursors\n' \
     | sudo tee /etc/sddm.conf.d/10-kalango.conf >/dev/null
 echo "   login screen installed; see it at your next logout"
