@@ -26,7 +26,7 @@ opaque=kaffeine,kmplayer,subtitlecomposer,kdenlive,vlc,smplayer,smplayer2,avidem
 [GeneralColors]
 window.color=#000000
 base.color=#000000
-alt.base.color=#0A0F14
+alt.base.color=#0A0F1466
 button.color=#0C322C
 light.color=#1A5C50
 mid.light.color=#124238

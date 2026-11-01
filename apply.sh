@@ -19,7 +19,11 @@ plasma-apply-cursortheme kalango-cursors >/dev/null
 echo ":: app style"
 # Kvantum replaces Breeze as the style of every Qt app. Back to Breeze:
 # kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Breeze
+# Glass: how solid app backgrounds are, in one place for every app (Kvantum and Konsole)
+APP_OPACITY=60
 kw kdeglobals KDE widgetStyle kvantum
+sed -i "s/^reduce_window_opacity=.*/reduce_window_opacity=$((100 - APP_OPACITY))/" "$HOME/.config/Kvantum/kalango/kalango.kvconfig"
+kw "$HOME/.local/share/konsole/NickLab.colorscheme" General Opacity "$(awk "BEGIN { print $APP_OPACITY / 100 }")"
 dbus-send --session --type=signal /KGlobalSettings org.kde.KGlobalSettings.notifyChange int32:2 int32:0
 
 echo ":: fonts"
