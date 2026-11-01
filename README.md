@@ -32,9 +32,11 @@ Gradient: `#2E6BFF → #3DFF9A`, left to right.
 | **kalango launcher** (`Meta+Space`, tap `Meta`) | Omarchy-style menu of openSUSE/KDE tools; a tap of Meta shows the main shortcuts |
 | **Notifications** | kalango's own notification server: popups under the bell, and a list with every unread notification, its app, date and time. History survives logout, sounds and Do not disturb are buttons in the list |
 | **Top bar** | Slim bar on every monitor. Left: notification bell with unread count, date and time. Middle: CPU, RAM, network, battery. Right: keyboard layout menu, audio, Wi-Fi, Bluetooth. Replaces the Plasma panel |
-| **Icons and cursor** | Papirus-Dark with blue→green gradient folders; Breeze cursor with a neon outline |
+| **Icons and cursor** | Papirus-Dark with kalango's own neon folders and interface icons; Breeze cursor with a neon outline |
 | **Wallpapers** | Three original calango drawings, crossfading every 10 minutes on every monitor |
-| **Login and lock screen** | kalango SDDM theme with the same card and border; the lock screen crossfades the wallpapers |
+| **Login and lock screen** | kalango SDDM theme with a card and the window border (see [docs/login-screen.md](docs/login-screen.md)); the lock screen crossfades the wallpapers |
+| **App style** | Kvantum theme: glass backgrounds, neon selection, gradient scrollbars. `APP_OPACITY` in `apply.sh` sets the opacity |
+| **kalango in System Settings** | Global Theme, Colors, Plasma Style and Window Decorations all under the kalango name |
 | **KRunner** (`Alt+Space`) | Search apps, files, settings, math |
 
 See [docs/shortcuts.md](docs/shortcuts.md) for the cheat sheet, and
