@@ -18,6 +18,9 @@ Scope {
 
     readonly property int height: 26    // one island
     readonly property int gap: 4        // space above the islands
+    // Every module uses the same sizes
+    readonly property int iconSize: 19
+    readonly property int labelSize: 13
 
     function ic(cp) { return String.fromCodePoint(cp); }
     function kcm(name) { Quickshell.execDetached(["systemsettings", name]); }
@@ -45,9 +48,8 @@ Scope {
         property string label
         property color tint: Theme.text
         property color labelTint: Theme.text
-        property int iconSize: 14
-        property int labelSize: 12
-        property int padding: 12
+        property bool labelBold: false
+        property int padding: 14
         signal scrolled(int delta)
 
         implicitWidth: row.implicitWidth + padding
@@ -80,7 +82,7 @@ Scope {
                 text: mod.icon
                 color: mod.tint
                 Behavior on color { ColorAnimation { duration: 600 } }
-                font.pixelSize: mod.iconSize
+                font.pixelSize: bar.iconSize
                 anchors.verticalCenter: parent.verticalCenter
             }
             Text {
@@ -88,8 +90,8 @@ Scope {
                 text: mod.label
                 color: mod.labelTint
                 Behavior on color { ColorAnimation { duration: 600 } }
-                font.pixelSize: mod.labelSize
-                font.bold: mod.labelSize > 12
+                font.pixelSize: bar.labelSize
+                font.bold: mod.labelBold
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -189,8 +191,7 @@ Scope {
                 // Do not disturb and settings live inside it
                 Module {
                     id: bell
-                    iconSize: 19
-                    labelSize: 13
+                    labelBold: true
                     padding: 24
                     icon: Notifications.dnd ? bar.ic(0xF009B)            // bell-off
                         : Notifications.unread > 0 ? bar.ic(0xF009E)     // bell-ring
@@ -230,7 +231,13 @@ Scope {
                     onClicked: bar.sysmon()
                 }
                 Module {
-                    label: `${bar.ic(0xF01DA)}${Stats.rate(Stats.down)} ${bar.ic(0xF0552)}${Stats.rate(Stats.up)}`
+                    icon: bar.ic(0xF01DA)    // download
+                    label: Stats.rate(Stats.down)
+                    onClicked: bar.sysmon()
+                }
+                Module {
+                    icon: bar.ic(0xF0552)    // upload
+                    label: Stats.rate(Stats.up)
                     onClicked: bar.sysmon()
                 }
 
