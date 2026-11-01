@@ -32,7 +32,7 @@ kw "$HOME/.local/share/konsole/kalango.colorscheme" General Opacity "$(awk "BEGI
 dbus-send --session --type=signal /KGlobalSettings org.kde.KGlobalSettings.notifyChange int32:2 int32:0
 
 echo ":: fonts"
-"$HOME/.local/bin/nickfont" "JetBrainsMono Nerd Font" 10 >/dev/null
+"$HOME/.local/bin/kalango-font" "JetBrainsMono Nerd Font" 10 >/dev/null
 kw kdeglobals General XftAntialias true
 kw kdeglobals General XftHintStyle hintslight
 kw kdeglobals General XftSubPixel rgb
@@ -43,7 +43,7 @@ for k in screenGapLeft screenGapRight screenGapTop screenGapBottom screenGapBetw
     kw kwinrc Script-krohnkite "$k" 10
 done
 kw kwinrc Script-krohnkite noTileBorder true
-kw kwinrc Script-krohnkite floatingTitle NickKeys
+kw kwinrc Script-krohnkite floatingTitle "Kalango Keys"
 # Monocle fills the tiling area (gaps, bar, border stay); F11 is the real fullscreen
 kw kwinrc Script-krohnkite monocleMaximize false
 # KWin's own edge snapping fights the tiler
@@ -132,12 +132,12 @@ ks kwin KrohnkiteFocusNext                                 # frees Meta+. (Meta+
 ks kwin KrohnkiteFocusPrev                                 # frees Meta+,
 ks org.kde.plasma.emojier.desktop _launch Meta+. Meta+Ctrl+Alt+Shift+Space
 ks systemsettings.desktop _launch Meta+,
-ks nickkeys.desktop _launch Meta+/
+ks kalango-keys.desktop _launch Meta+/
 
 echo ":: window rules"
-R=kwinrulesrc id=nickkeys-popup
-kw $R $id Description "NickKeys popup"
-kw $R $id title NickKeys;               kw $R $id titlematch 1
+R=kwinrulesrc id=kalango-keys-popup
+kw $R $id Description "Kalango Keys popup"
+kw $R $id title "Kalango Keys";              kw $R $id titlematch 1
 kw $R $id wmclass org.qt-project.qml6;  kw $R $id wmclassmatch 1
 kw $R $id size 1100,650;                kw $R $id sizerule 3
 kw $R $id placement 5;                  kw $R $id placementrule 3

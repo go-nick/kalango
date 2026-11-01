@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# nickfont — switch the KDE UI font live.
-#   nickfont                 pick interactively (fzf: font applies as you scroll)
-#   nickfont "Hack Nerd Font" [size]
-#   nickfont --list
+# kalango-font — switch the KDE UI font live.
+#   kalango-font                 pick interactively (fzf: font applies as you scroll)
+#   kalango-font "Hack Nerd Font" [size]
+#   kalango-font --list
 set -euo pipefail
 
-SIZE="${NICKFONT_SIZE:-10}"
+SIZE="${KALANGO_FONT_SIZE:-10}"
 
 list_fonts() {
     fc-list : family | tr ',' '\n' | grep -E ' Nerd Font$' \

@@ -82,7 +82,7 @@ function build(allApps) {
             {
                 id: "learn", label: "Learn", glyph: g(0xF0474), hint: "Shortcuts and docs",
                 children: [
-                    { label: "Keyboard Shortcuts", glyph: g(0xF030C), keys: "Meta + /", hint: "NickKeys: every shortcut, searchable", run: { cmd: ["~/.local/bin/nickkeys", "--gui"] } },
+                    { label: "Keyboard Shortcuts", glyph: g(0xF030C), keys: "Meta + /", hint: "Kalango Keys: every shortcut, searchable", run: { cmd: ["~/.local/bin/kalango-keys", "--gui"] } },
                     { label: "kalango Cheat Sheet", glyph: g(0xF0219), hint: "github.com/go-nick/kalango › docs/shortcuts.md", run: { url: "https://github.com/go-nick/kalango/blob/main/docs/shortcuts.md" } },
                     { label: "openSUSE Docs", glyph: g(0xF0314), hint: "doc.opensuse.org", run: { url: "https://doc.opensuse.org/" } },
                     { label: "Tumbleweed Portal", glyph: g(0xF0314), hint: "en.opensuse.org › Portal:Tumbleweed", run: { url: "https://en.opensuse.org/Portal:Tumbleweed" } },
@@ -175,7 +175,7 @@ function hints() {
     const kwin = (action) => ({ shortcut: ["kwin", action] });
     return [
         { label: "Menu & Search", glyph: g(0xF0349), keys: "Meta + Space", hint: "Apps, settings, YaST, capture, power", run: { menu: true } },
-        { label: "All Shortcuts", glyph: g(0xF030C), keys: "Meta + /", hint: "NickKeys: every shortcut, searchable", run: { cmd: ["~/.local/bin/nickkeys", "--gui"] } },
+        { label: "All Shortcuts", glyph: g(0xF030C), keys: "Meta + /", hint: "Kalango Keys: every shortcut, searchable", run: { cmd: ["~/.local/bin/kalango-keys", "--gui"] } },
         { label: "Focus Left", glyph: g(0xF004D), keys: "Meta + H", hint: "Tiling: move focus", run: kwin("KrohnkiteFocusLeft") },
         { label: "Focus Down", glyph: g(0xF0045), keys: "Meta + J", hint: "Tiling: move focus", run: kwin("KrohnkiteFocusDown") },
         { label: "Focus Up", glyph: g(0xF005D), keys: "Meta + K", hint: "Tiling: move focus", run: kwin("KrohnkiteFocusUp") },
