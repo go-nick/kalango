@@ -24,4 +24,6 @@ Singleton {
 
     readonly property int radius: 10
     readonly property int border: 2
+    // Seconds per turn of the spinning border; same as OutlineSpinSeconds in apply.sh
+    readonly property int spinSeconds: 8
 }

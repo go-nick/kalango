@@ -80,14 +80,19 @@ Scope {
                 opacity: win.reveal
                 radius: Theme.radius + 4
                 color: "#000000"
-                border.width: 1
-                border.color: Theme.pine
 
                 focus: true
                 Keys.onEscapePressed: Notifications.listOpen = false
 
                 // Swallow clicks so they don't reach the close area behind
                 MouseArea { anchors.fill: parent }
+
+                // Same border as the focused window
+                SpinningBorder {
+                    anchors.fill: parent
+                    radius: panel.radius
+                    running: Notifications.listOpen
+                }
 
                 ColumnLayout {
                     anchors { fill: parent; margins: 14 }
