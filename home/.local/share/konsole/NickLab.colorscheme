@@ -5,11 +5,11 @@ Blur=true
 Wallpaper=
 
 [Background]
-Color=10,15,20
+Color=0,0,0
 [BackgroundIntense]
 Color=12,50,44
 [BackgroundFaint]
-Color=10,15,20
+Color=0,0,0
 [Foreground]
 Color=230,241,236
 [ForegroundIntense]
