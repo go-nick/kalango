@@ -343,7 +343,8 @@ Scope {
                             required property int index
                             readonly property var item: modelData.item
                             readonly property bool current: ListView.isCurrentItem
-                            readonly property bool asking: win.confirming === item
+                            // Through win.rows: the delegate's modelData is a copy, never the same object
+                            readonly property bool asking: win.confirming !== null && win.rows[index]?.item === win.confirming
                             width: list.width
                             height: list.rowHeight
 
