@@ -1,0 +1,16 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "kalango"
+            }
+        ],
+        "Category": "",
+        "Description": "kalango's Plasma style: Breeze's shapes with kalango's colors",
+        "Id": "kalango",
+        "License": "Apache-2.0",
+        "Name": "kalango",
+        "Website": "https://github.com/go-nick/kalango"
+    },
+    "X-Plasma-API": "5.0"
+}
