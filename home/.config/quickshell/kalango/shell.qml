@@ -6,8 +6,11 @@ import Quickshell
 ShellRoot {
     // DesktopEntries only scans on first access; touch it at startup so the
     // first Meta+Space already has the app list.
-    Component.onCompleted: DesktopEntries.applications
+    // Notifications is touched too, so the notification server starts at login.
+    Component.onCompleted: { DesktopEntries.applications; Notifications.unread; }
 
     Launcher {}
     Bar {}
+    NotificationPopups {}
+    NotificationList {}
 }
