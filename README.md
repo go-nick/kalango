@@ -23,12 +23,12 @@ Gradient: `#2E6BFF → #3DFF9A`, left to right.
 
 | Piece | What it does |
 |---|---|
-| **NickLab color scheme** | Flat dark KDE colors from the palette |
-| **Nerd Fonts + `nickfont`** | JetBrains Mono as the OS font, with `->` ligatures. 11 more monospace Nerd Fonts and a live font switcher |
+| **kalango color scheme** | Flat dark KDE colors from the palette |
+| **Nerd Fonts + `kalango-font`** | JetBrains Mono as the OS font, with `->` ligatures. 11 more monospace Nerd Fonts and a live font switcher |
 | **Krohnkite** (patched) | Auto-tiling, 10px gaps, borderless tiles; Meta+H/J/K/L focus also crosses monitors |
 | **KDE-Rounded-Corners** (patched) | 2px gradient border that slowly rotates on the active window |
-| **NickLab Konsole** | Translucent, blurred terminal with palette ANSI colors |
-| **NickKeys** (`Meta+/`) | Popup that searches every shortcut, with favorites pinned on top |
+| **kalango Konsole** | Translucent, blurred terminal with palette ANSI colors |
+| **Kalango Keys** (`Meta+/`) | Popup that searches every shortcut, with favorites pinned on top |
 | **kalango launcher** (`Meta+Space`, tap `Meta`) | Omarchy-style menu of openSUSE/KDE tools; a tap of Meta shows the main shortcuts |
 | **Notifications** | kalango's own notification server: popups under the bell, and a list with every unread notification, its app, date and time. History survives logout, sounds and Do not disturb are buttons in the list |
 | **Top bar** | Slim bar on every monitor. Left: notification bell with unread count, date and time. Middle: CPU, RAM, network, battery. Right: keyboard layout menu, audio, Wi-Fi, Bluetooth. Replaces the Plasma panel |
@@ -68,7 +68,7 @@ packages.txt zypper packages
 ## After a Plasma update
 
 The border effect is compiled against your exact KWin version. If borders vanish after
-`zypper dup`, run `nickborders-rebuild` (or `scripts/build-borders.sh`) and log out/in.
+`zypper dup`, run `kalango-borders-rebuild` (or `scripts/build-borders.sh`) and log out/in.
 
 `scripts/kwin-scale-fade-only.sh` keeps a patched copy of KWin's Scale animation so the
 launcher fades instead of zooming. Re-run it after a Plasma update so the copy tracks upstream;

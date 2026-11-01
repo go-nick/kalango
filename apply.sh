@@ -5,8 +5,15 @@ set -euo pipefail
 
 kw() { kwriteconfig6 --file "$1" --group "$2" --key "$3" "$4"; }
 
+echo ":: global theme"
+# Registers kalango in System Settings > Global Theme and as the current theme
+kw kdeglobals KDE LookAndFeelPackage org.kalango.desktop
+plasma-apply-desktoptheme kalango >/dev/null
+kw kwinrc org.kde.kdecoration2 library org.kde.kwin.aurorae
+kw kwinrc org.kde.kdecoration2 theme __aurorae__svg__kalango
+
 echo ":: colors"
-plasma-apply-colorscheme NickLab >/dev/null
+plasma-apply-colorscheme kalango >/dev/null
 
 echo ":: icons"
 # Built by scripts/build-icons.py (Papirus-Dark + kalango folders); applies live
@@ -16,8 +23,18 @@ echo ":: cursor"
 # Built by scripts/build-cursors.py; applies live
 plasma-apply-cursortheme kalango-cursors >/dev/null
 
+echo ":: app style"
+# Kvantum replaces Breeze as the style of every Qt app. Back to Breeze:
+# kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Breeze
+# Glass: how solid app backgrounds are, in one place for every app (Kvantum and Konsole)
+APP_OPACITY=50
+kw kdeglobals KDE widgetStyle kvantum
+sed -i "s/^reduce_window_opacity=.*/reduce_window_opacity=$((100 - APP_OPACITY))/" "$HOME/.config/Kvantum/kalango/kalango.kvconfig"
+kw "$HOME/.local/share/konsole/kalango.colorscheme" General Opacity "$(awk "BEGIN { print $APP_OPACITY / 100 }")"
+dbus-send --session --type=signal /KGlobalSettings org.kde.KGlobalSettings.notifyChange int32:2 int32:0
+
 echo ":: fonts"
-"$HOME/.local/bin/nickfont" "JetBrainsMono Nerd Font" 10 >/dev/null
+"$HOME/.local/bin/kalango-font" "JetBrainsMono Nerd Font" 10 >/dev/null
 kw kdeglobals General XftAntialias true
 kw kdeglobals General XftHintStyle hintslight
 kw kdeglobals General XftSubPixel rgb
@@ -28,7 +45,7 @@ for k in screenGapLeft screenGapRight screenGapTop screenGapBottom screenGapBetw
     kw kwinrc Script-krohnkite "$k" 10
 done
 kw kwinrc Script-krohnkite noTileBorder true
-kw kwinrc Script-krohnkite floatingTitle NickKeys
+kw kwinrc Script-krohnkite floatingTitle "Kalango Keys"
 # Monocle fills the tiling area (gaps, bar, border stay); F11 is the real fullscreen
 kw kwinrc Script-krohnkite monocleMaximize false
 # KWin's own edge snapping fights the tiler
@@ -57,7 +74,7 @@ echo ":: open/close animation"
 
 echo ":: blur"
 kw kwinrc Plugins blurEnabled true
-kw kwinrc Effect-blur BlurStrength 3
+kw kwinrc Effect-blur BlurStrength 4
 kw kwinrc Effect-blur NoiseStrength 2
 
 echo ":: top bar"
@@ -96,7 +113,7 @@ for kv in "SlidePaths $WALLS/" "SlideInterval 600" "FillMode 2"; do
 done
 
 echo ":: konsole"
-kw konsolerc "Desktop Entry" DefaultProfile NickLab.profile
+kw konsolerc "Desktop Entry" DefaultProfile kalango.profile
 
 echo ":: shortcuts"
 # Set live through kglobalaccel (no logout). The helper refuses keys another
@@ -117,12 +134,12 @@ ks kwin KrohnkiteFocusNext                                 # frees Meta+. (Meta+
 ks kwin KrohnkiteFocusPrev                                 # frees Meta+,
 ks org.kde.plasma.emojier.desktop _launch Meta+. Meta+Ctrl+Alt+Shift+Space
 ks systemsettings.desktop _launch Meta+,
-ks nickkeys.desktop _launch Meta+/
+ks kalango-keys.desktop _launch Meta+/
 
 echo ":: window rules"
-R=kwinrulesrc id=nickkeys-popup
-kw $R $id Description "NickKeys popup"
-kw $R $id title NickKeys;               kw $R $id titlematch 1
+R=kwinrulesrc id=kalango-keys-popup
+kw $R $id Description "Kalango Keys popup"
+kw $R $id title "Kalango Keys";              kw $R $id titlematch 1
 kw $R $id wmclass org.qt-project.qml6;  kw $R $id wmclassmatch 1
 kw $R $id size 1100,650;                kw $R $id sizerule 3
 kw $R $id placement 5;                  kw $R $id placementrule 3

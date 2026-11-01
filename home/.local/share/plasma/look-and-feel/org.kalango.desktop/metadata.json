@@ -1,0 +1,16 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "kalango"
+            }
+        ],
+        "Category": "",
+        "Description": "kalango: black glass and neon on openSUSE",
+        "Id": "org.kalango.desktop",
+        "License": "Apache-2.0",
+        "Name": "kalango",
+        "Website": "https://github.com/go-nick/kalango"
+    }
+}

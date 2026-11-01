@@ -1,49 +1,106 @@
 #!/usr/bin/env python3
-"""Build the kalango icon theme: Papirus-Dark with folders in the kalango gradient.
+"""Build the kalango icon theme: Papirus-Dark with kalango's own folders.
 
-A small overlay theme. It only contains Papirus's blue folder icons (folder,
-documents, downloads, home, ...), recolored: the folder front becomes the blue ->
-green gradient, the tab a darker gradient, the symbol Void. Everything else
-falls through to Papirus-Dark via Inherits, so Papirus updates keep working.
+A small overlay theme. Every Papirus folder and place icon gets kalango's design,
+black glass with a glowing neon outline, keeping Papirus's symbol (documents, music,
+home, ...) recolored to neon. Single-color interface icons (back, search, close, ...)
+turn neon too. Everything else falls through to Papirus-Dark via
+Inherits, so Papirus updates keep working.
+
+The glow is layered translucent lines, not an SVG filter, because icon renderers
+may ignore filters.
 
 Generated from the installed Papirus (papirus-icon-theme, official repos), so it
 follows Papirus updates when re-run.
 
-Output: ~/.local/share/icons/kalango/
+Output: ~/.local/share/icons/kalango/ (or the folder given as an argument)
 """
 import configparser
 import os
 import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 PAPIRUS = Path("/usr/share/icons/Papirus")
 INDEX = Path("/usr/share/icons/Papirus-Dark/index.theme")
-DST = Path.home() / ".local/share/icons/kalango"
+DST = Path(sys.argv[1]) if len(sys.argv) > 1 else Path.home() / ".local/share/icons/kalango"
 
-FRONT = "#5294e2"   # Papirus blue folder colors
-TAB = "#4877b1"
-SYMBOL = "#1d344f"
+FRONT = "#5294e2"   # Papirus's blue folder front, which identifies the icons we replace
+SYMBOL = "#1d344f"  # Papirus's symbol color on those icons
+NEON = "#3DFF9A"
 
-GRADIENTS = (
-    '<defs>'
-    '<linearGradient id="kalango-front" x1="0" y1="0" x2="1" y2="0">'
-    '<stop offset="0" stop-color="#2E6BFF"/><stop offset="1" stop-color="#3DFF9A"/>'
-    '</linearGradient>'
-    '<linearGradient id="kalango-tab" x1="0" y1="0" x2="1" y2="0">'
-    '<stop offset="0" stop-color="#1D47B8"/><stop offset="1" stop-color="#25B86E"/>'
-    '</linearGradient>'
-    '</defs>'
-)
+# Drawn on a 64 x 64 grid and scaled to each size
+OUTLINE = "M9 11 H24 Q26 11 27.5 12.5 L32 17 H55 Q60 17 60 22 V49 Q60 54 55 54 H9 Q4 54 4 49 V16 Q4 11 9 11 Z"
+FLAP = "M4 26 H60"
 
 
-def recolor(svg):
-    svg = svg.replace(f"fill:{FRONT}", "fill:url(#kalango-front)")
-    svg = svg.replace(f"fill:{TAB}", "fill:url(#kalango-tab)")
-    svg = svg.replace(f"fill:{SYMBOL}", "fill:#0A0F14")
-    # Gradients go right after the opening <svg ...> tag
-    return re.sub(r"(<svg[^>]*>)", r"\1" + GRADIENTS, svg, count=1)
+def folder(size):
+    """The folder at one icon size; small sizes drop the glow, which would turn to mud."""
+    k = 64 / size   # stroke widths below are in real pixels
+    line = f'fill="none" stroke="{NEON}" stroke-linejoin="round"'
+    glow = "" if size < 32 else (
+        f'<path d="{OUTLINE}" {line} stroke-opacity=".12" stroke-width="{4 * k}"/>'
+        f'<path d="{OUTLINE}" {line} stroke-opacity=".22" stroke-width="{2.5 * k}"/>')
+    flap = "" if size < 22 else f'<path d="{FLAP}" {line} stroke-opacity=".35" stroke-width="{k}"/>'
+    return (f'<g transform="scale({size / 64})"><path d="{OUTLINE}" fill="#000000" fill-opacity=".8"/>'
+            f'{glow}{flap}<path d="{OUTLINE}" {line} stroke-width="{(1 if size < 32 else 1.25) * k}"/></g>')
+
+
+# Trash can on the same grid: lid, handle, body, and contents when full
+TRASH_LID = "M12 18 H52 M25 18 V13 Q25 10 28 10 H36 Q39 10 39 13 V18"
+TRASH_BODY = "M16 18 L19 51 Q19.5 55 24 55 H40 Q44.5 55 45 51 L48 18"
+TRASH_FULL = "M26 28 V46 M32 28 V46 M38 28 V46"
+
+
+def trash(size, full):
+    """The trash can at one size, drawn like the folders: glass, glow, neon line."""
+    k = 64 / size
+    line = f'fill="none" stroke="{NEON}" stroke-linecap="round" stroke-linejoin="round"'
+    both = f"{TRASH_LID} {TRASH_BODY}"
+    glow = "" if size < 32 else (
+        f'<path d="{both}" {line} stroke-opacity=".12" stroke-width="{4 * k}"/>'
+        f'<path d="{both}" {line} stroke-opacity=".22" stroke-width="{2.5 * k}"/>')
+    contents = f'<path d="{TRASH_FULL}" {line} stroke-width="{k}"/>' if full else ""
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}">'
+            f'<g transform="scale({size / 64})"><path d="{TRASH_BODY} Z" fill="#000000" fill-opacity=".8"/>'
+            f'{glow}<path d="{both}" {line} stroke-width="{(1 if size < 32 else 1.25) * k}"/>{contents}</g></svg>')
+
+
+def redraw(svg):
+    """Papirus's symbol, in neon, on kalango's folder."""
+    size = int(re.search(r'<svg[^>]*\bwidth="(\d+)', svg).group(1))
+    symbols = re.findall(rf'<(?:path|rect|circle|ellipse|g)\b[^>]*fill:{SYMBOL}[^>]*?/>', svg)
+    symbols = "".join(s.replace(f"fill:{SYMBOL}", f"fill:{NEON}") for s in symbols)
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}">'
+            f'{folder(size)}{symbols}</svg>')
+
+
+def neon_interface(dirs, papirus):
+    """Copy Papirus's single-color interface icons in neon.
+
+    KDE repaints the ColorScheme-Text class with the color scheme's text color, so the
+    class is renamed. Warning colors (ColorScheme-Negative*, ...) stay as they are.
+    """
+    dark = INDEX.parent
+    for source in sorted([*dark.glob("*/actions"), *dark.glob("*/symbolic/*")]):
+        name = str(source.relative_to(dark))
+        if not papirus.has_section(name) or not source.is_dir():
+            continue
+        out = DST / name
+        for icon in source.iterdir():
+            if icon.suffix != ".svg" or not icon.exists():
+                continue
+            text = icon.read_text()
+            if "ColorScheme-Text" not in text:
+                continue
+            text = re.sub(r"\.ColorScheme-Text\s*\{\s*color:\s*#[0-9a-fA-F]+",
+                          f".KalangoIcon {{ color:{NEON}", text)
+            out.mkdir(parents=True, exist_ok=True)
+            (out / icon.name).write_text(text.replace("ColorScheme-Text", "KalangoIcon"))
+        if out.exists() and name not in dirs:
+            dirs.append(name)
 
 
 def main():
@@ -74,15 +131,23 @@ def main():
             if FRONT not in text:
                 continue
             out.mkdir(parents=True, exist_ok=True)
-            (out / icon.name).write_text(recolor(text))
+            (out / icon.name).write_text(redraw(text))
+        for icon in ("user-trash", "user-trash-full"):
+            source = places / f"{icon}.svg"
+            if source.exists():
+                size = int(re.search(r'<svg[^>]*\bwidth="(\d+)', source.read_text()).group(1))
+                out.mkdir(parents=True, exist_ok=True)
+                (out / source.name).write_text(trash(size, icon.endswith("full")))
         if out.exists() and papirus.has_section(name):
             dirs.append(name)
+
+    neon_interface(dirs, papirus)
 
     theme = configparser.ConfigParser(interpolation=None)
     theme.optionxform = str
     theme["Icon Theme"] = {
         "Name": "kalango",
-        "Comment": "Papirus-Dark with folders in the kalango gradient",
+        "Comment": "Papirus-Dark with kalango's own folders",
         "Inherits": "Papirus-Dark,breeze-dark,hicolor",
         "Example": "folder",
         "Directories": ",".join(dirs),

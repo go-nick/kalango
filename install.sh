@@ -13,7 +13,7 @@ echo ":: files -> \$HOME"
 (cd "$REPO/home" && find . -type f) | while read -r f; do
     dest="$HOME/${f#./}"
     # Never clobber favorites someone already starred
-    [[ "$f" == */nickkeys-favorites.json && -e "$dest" ]] && continue
+    [[ "$f" == */keys-favorites.json && -e "$dest" ]] && continue
     mkdir -p "$(dirname "$dest")"
     # Dev setups symlink repo dirs into $HOME; writing a file onto itself would empty it
     [[ "$(realpath -m "$dest")" == "$(realpath "$REPO/home/$f")" ]] && continue
@@ -43,7 +43,6 @@ echo ":: borders"
 echo ":: quickshell"
 "$REPO/scripts/build-quickshell.sh"
 
-echo ":: login screen (sudo)"
-"$REPO/scripts/install-login-theme.sh"
+# Login screen: not installed until #23 is fixed (scripts/install-login-theme.sh)
 
 "$REPO/apply.sh"

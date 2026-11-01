@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=NickKeys
+Name=Kalango Keys
 Comment=Search all configured keyboard shortcuts
-Exec=@HOME@/.local/bin/nickkeys --gui
+Exec=@HOME@/.local/bin/kalango-keys --gui
 Icon=preferences-desktop-keyboard-shortcuts
 Terminal=false
 Categories=Utility;

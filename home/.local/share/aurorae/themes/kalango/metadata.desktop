@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=kalango
+Comment=kalango window decoration: black title bar with neon buttons
+X-KDE-PluginInfo-Author=kalango
+X-KDE-PluginInfo-Name=kalango
+X-KDE-PluginInfo-License=Apache-2.0
+X-KDE-PluginInfo-Website=https://github.com/go-nick/kalango
+X-Plasma-API=declarativeappletscript

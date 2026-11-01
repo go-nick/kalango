@@ -30,7 +30,7 @@ kalango RPMs that install system-wide defaults (`/usr/share`, `/etc/xdg`, `/etc/
 | Quickshell config (top bar, launcher, notifications) | `home/.config/quickshell/kalango/` | `~/.config/quickshell/kalango` |
 | OS font: JetBrains Mono for generic font requests | `home/.config/fontconfig/conf.d` | same under `~` |
 | Color scheme, Konsole profile | `home/.local/share/color-schemes`, `home/.local/share/konsole` | same under `~` |
-| Tools: `nickfont`, `nickkeys`, `nickborders-rebuild` | `home/.local/bin`, `home/.local/share/nicklab`, `home/.config/nicklab` | same under `~` |
+| Tools: `kalango-font`, `kalango-keys`, `kalango-borders-rebuild` | `home/.local/bin`, `home/.local/share/kalango`, `home/.config/kalango` | same under `~` |
 | Launchers, autostart | `home/.local/share/applications`, `home/.config/autostart` | same under `~` |
 | Notification server auto-start (D-Bus, overrides Plasma's) | `home/.local/share/dbus-1/services` | same under `~` |
 | Wallpapers (calango: sunbath, scales, line) | `wallpapers/*.svg`, rendered by `scripts/install-wallpapers.sh` | `~/.local/share/wallpapers/kalango` (4K PNG) |

@@ -4,7 +4,7 @@
  }
  var KWINCONFIG;
  var KWIN;
-+var KWIN_WORKSPACE; // NickLab patch
++var KWIN_WORKSPACE; // kalango patch
  class KWinDriver {
      get backend() {
          return KWinDriver.backendName;
@@ -21,14 +21,14 @@
              if (tiles.length > 1)
                  ctx.currentWindow = tiles[0];
 +            else
-+                nicklabFocusAcrossScreens(dir);
++                kalangoFocusAcrossScreens(dir);
              return;
          }
          const neighbor = this.getNeighborByDirection(ctx, window, dir);
          if (neighbor)
              ctx.currentWindow = neighbor;
 +        else
-+            nicklabFocusAcrossScreens(dir);
++            kalangoFocusAcrossScreens(dir);
      }
      swapOrder(window, step) {
          const srf = window.surface;
@@ -37,8 +37,8 @@
      }
  }
 +
-+// NickLab patch: no neighbor on this screen -> let KWin pick the window in that direction on any screen
-+function nicklabFocusAcrossScreens(dir) {
++// kalango patch: no neighbor on this screen -> let KWin pick the window in that direction on any screen
++function kalangoFocusAcrossScreens(dir) {
 +    const slots = { up: "slotSwitchWindowUp", down: "slotSwitchWindowDown", left: "slotSwitchWindowLeft", right: "slotSwitchWindowRight" };
 +    if (KWIN_WORKSPACE && slots[dir] && typeof KWIN_WORKSPACE[slots[dir]] === "function")
 +        KWIN_WORKSPACE[slots[dir]]();

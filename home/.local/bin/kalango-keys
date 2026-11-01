@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""nickkeys — searchable list of every global shortcut configured in KDE.
+"""kalango-keys — searchable list of every global shortcut configured in KDE.
 
 Reads ~/.config/kglobalshortcutsrc and pipes it into fzf (falls back to less).
-  nickkeys            interactive search
-  nickkeys --gui      floating search popup (bound to Meta+/)
-  nickkeys --print    plain list (pipe it, grep it)
+  kalango-keys            interactive search
+  kalango-keys --gui      floating search popup (bound to Meta+/)
+  kalango-keys --print    plain list (pipe it, grep it)
 """
 import json
 import os
@@ -14,7 +14,7 @@ import subprocess
 import sys
 
 RC = os.path.expanduser("~/.config/kglobalshortcutsrc")
-FAVS = os.path.expanduser("~/.config/nicklab/nickkeys-favorites.json")
+FAVS = os.path.expanduser("~/.config/kalango/keys-favorites.json")
 
 # Component group names -> friendlier labels
 LABELS = {"kwin": "Windows", "plasmashell": "Plasma", "ksmserver": "Session",
@@ -96,7 +96,7 @@ def main():
         os.makedirs(os.path.dirname(FAVS), exist_ok=True)
         data = json.dumps({"favPath": FAVS, "favs": favs,
                            "rows": [{"keys": k, "action": d, "group": c, "id": i} for k, d, c, i in rows]})
-        qml = os.path.expanduser("~/.local/share/nicklab/nickkeys.qml")
+        qml = os.path.expanduser("~/.local/share/kalango/keys.qml")
         # QML saves favorites with XMLHttpRequest PUT to a file:// URL
         os.environ["QML_XHR_ALLOW_FILE_READ"] = "1"
         os.environ["QML_XHR_ALLOW_FILE_WRITE"] = "1"

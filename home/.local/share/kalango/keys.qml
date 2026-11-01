@@ -1,5 +1,5 @@
-// NickKeys — searchable popup of every KDE global shortcut.
-// Launched by `nickkeys --gui`; {rows, favs, favPath} arrive as a JSON argument after "--".
+// Kalango Keys — searchable popup of every KDE global shortcut.
+// Launched by `kalango-keys --gui`; {rows, favs, favPath} arrive as a JSON argument after "--".
 // Favorites are saved back to favPath (XHR file write enabled by the launcher).
 import QtQuick
 import QtQuick.Controls.Basic
@@ -7,7 +7,7 @@ import QtQuick.Layouts
 
 Window {
     id: root
-    title: "NickKeys"
+    title: "Kalango Keys"
     width: 1100
     height: 650
     visible: true
@@ -34,7 +34,7 @@ Window {
         const hay = (r.keys + " " + r.action + " " + r.group + (favs.includes(r.id) ? " fav" : "")).toLowerCase();
         return q.toLowerCase().split(/\s+/).every(w => hay.indexOf(w) >= 0);
     }
-    // Favorites float to the top; otherwise keep the order nickkeys sent
+    // Favorites float to the top; otherwise keep the order kalango-keys sent
     property var shown: {
         const hits = rows.filter(r => matches(r, search.text));
         const fav = hits.filter(r => favs.includes(r.id));
