@@ -86,6 +86,15 @@ qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
         d.reloadConfig();
     })" >/dev/null
 
+echo ":: lock screen"
+# Settings only: KDE's lock screen itself stays stock so updates can't break unlocking.
+# Colors and font already follow the desktop.
+lk() { kwriteconfig6 --file kscreenlockerrc --group Greeter "$@"; }
+lk --key WallpaperPlugin org.kde.slideshow
+for kv in "SlidePaths $WALLS/" "SlideInterval 600" "FillMode 2"; do
+    lk --group Wallpaper --group org.kde.slideshow --group General --key ${kv% *} "${kv#* }"
+done
+
 echo ":: konsole"
 kw konsolerc "Desktop Entry" DefaultProfile NickLab.profile
 

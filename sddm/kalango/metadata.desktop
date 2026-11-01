@@ -1,0 +1,8 @@
+[SddmGreeterTheme]
+Name=kalango
+Description=kalango login screen
+Type=sddm-theme
+Version=1.0
+License=Apache-2.0
+MainScript=Main.qml
+ConfigFile=theme.conf
