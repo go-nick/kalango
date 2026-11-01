@@ -32,7 +32,7 @@ light.color=#1A5C50
 mid.light.color=#124238
 dark.color=#000000
 mid.color=#0C322C
-highlight.color=#3DFF9A
+highlight.color=#0C322C
 inactive.highlight.color=#0C322C
 tooltip.base.color=#0C322C
 text.color=#E6F1EC
@@ -40,7 +40,7 @@ window.text.color=#E6F1EC
 button.text.color=#E6F1EC
 disabled.text.color=#7A8C85
 tooltip.text.color=#E6F1EC
-highlight.text.color=#0A0F14
+highlight.text.color=#3DFF9A
 link.color=#3DFF9A
 link.visited.color=#30BA78
 
@@ -229,10 +229,13 @@ inherits=PanelButtonCommand
 text.margin=0
 frame.element=itemview
 interior.element=itemview
-frame.top=2
-frame.bottom=2
-frame.left=2
-frame.right=2
+frame.top=4
+frame.bottom=4
+frame.left=4
+frame.right=4
+text.focus.color=#3DFF9A
+text.press.color=#3DFF9A
+text.toggle.color=#3DFF9A
 
 [Splitter]
 inherits=PanelButtonCommand
