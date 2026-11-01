@@ -1,0 +1,176 @@
+/* kalango notifications: swaync's default stylesheet, restyled.
+ * Only colors, shapes and spacing are overridden, so swaync updates keep working.
+ * Palette: black islands like the top bar, Pine panels, neon / blue accents,
+ * solar yellow for critical. */
+@import url("file:///etc/xdg/swaync/style.css");
+
+:root {
+  --cc-bg: #000000;
+  --noti-border-color: #0C322C;
+  --noti-bg: 0, 0, 0;
+  --noti-bg-alpha: 1;
+  --noti-bg-darker: #000000;
+  --noti-bg-hover: #0A0F14;
+  --noti-bg-focus: rgba(61, 255, 154, 0.04);
+  --noti-close-bg: rgba(230, 241, 236, 0.08);
+  --noti-close-bg-hover: rgba(230, 241, 236, 0.16);
+  --text-color: #E6F1EC;
+  --text-color-disabled: #7A8C85;
+  --bg-selected: #3DFF9A;
+  --border-radius: 14px;
+  --notification-icon-size: 48px;
+  --notification-shadow: none;
+  --font-size-body: 13px;
+  --font-size-summary: 14px;
+}
+
+@define-color cc-bg #000000;
+@define-color noti-border-color #0C322C;
+@define-color noti-bg #000000;
+@define-color noti-bg-opaque #000000;
+@define-color noti-bg-darker #000000;
+@define-color noti-bg-hover #0A0F14;
+@define-color noti-bg-hover-opaque #0A0F14;
+@define-color noti-bg-focus rgba(61, 255, 154, 0.04);
+@define-color noti-close-bg rgba(230, 241, 236, 0.08);
+@define-color noti-close-bg-hover rgba(230, 241, 236, 0.16);
+@define-color text-color #E6F1EC;
+@define-color text-color-disabled #7A8C85;
+@define-color bg-selected #3DFF9A;
+
+/* ── popups ── */
+
+.notification-row .notification-background {
+  padding: 4px 10px;
+}
+
+/* The blue -> green signature as a thin bar on the notification's left edge */
+.notification-row .notification-background .notification {
+  border: 1px solid #0C322C;
+  background-color: #000000;
+  background-image: linear-gradient(to bottom, #2E6BFF, #3DFF9A);
+  background-size: 3px 100%;
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+
+.notification-row .notification-background .notification.low {
+  background-image: linear-gradient(to bottom, rgba(46, 107, 255, 0.45), rgba(61, 255, 154, 0.45));
+}
+
+/* Critical: solar yellow edge and border, stays until dismissed */
+.notification-row .notification-background .notification.critical {
+  border-color: rgba(255, 210, 63, 0.5);
+  background-image: linear-gradient(to bottom, #FFD23F, #FFD23F);
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content {
+  padding: 6px 6px 6px 10px;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .summary {
+  font-weight: bold;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .time {
+  color: #7A8C85;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .body {
+  color: rgba(230, 241, 236, 0.8);
+}
+
+/* Progress: the signature gradient on a Pine track */
+.notification-row .notification-background .notification .notification-default-action .notification-content progressbar trough {
+  background: #0C322C;
+  border-radius: 3px;
+  min-height: 6px;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content progressbar progress {
+  background-image: linear-gradient(to right, #2E6BFF, #3DFF9A);
+  border-radius: 3px;
+  min-height: 6px;
+}
+
+/* Action buttons: Pine pills, neon on hover */
+.notification-row .notification-background .notification .notification-action > button {
+  background: #0C322C;
+  border: none;
+  box-shadow: none;
+  color: #E6F1EC;
+}
+
+.notification-row .notification-background .notification .notification-action > button:hover {
+  background: #3DFF9A;
+  color: #0A0F14;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content .inline-reply .inline-reply-entry {
+  background: #0A0F14;
+  border: 1px solid #0C322C;
+  color: #E6F1EC;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content .inline-reply .inline-reply-button {
+  background: #0C322C;
+  color: #E6F1EC;
+}
+
+.close-button:hover {
+  background: #3DFF9A;
+  color: #0A0F14;
+}
+
+/* ── notification center ── */
+
+.control-center {
+  border: 1px solid #0C322C;
+}
+
+.widget-title > label {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.widget-title > button {
+  background: #0C322C;
+  border: none;
+  box-shadow: none;
+  color: #E6F1EC;
+}
+
+.widget-title > button:hover {
+  background: #3DFF9A;
+  color: #0A0F14;
+}
+
+.widget-dnd label {
+  font-size: 1rem;
+}
+
+.widget-dnd switch {
+  background: #0C322C;
+  border: none;
+}
+
+.widget-dnd switch:checked {
+  background: #FFD23F;
+}
+
+.widget-dnd switch slider {
+  background: #E6F1EC;
+}
+
+.control-center .control-center-list-placeholder {
+  color: #7A8C85;
+}
+
+.notification-group .notification-group-headers .notification-group-header {
+  color: #7A8C85;
+}
+
+.widget-mpris .widget-mpris-player {
+  background: #0A0F14;
+  border: 1px solid #0C322C;
+}
