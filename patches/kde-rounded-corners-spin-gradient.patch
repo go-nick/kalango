@@ -6,7 +6,7 @@ index 0578b98..fac7397 100644
      if (window->isAnimating) {
          kwindow->addRepaintFull();
      }
-+    // NickLab patch: spinning gradient needs a fresh frame every vblank on the active window
++    // kalango patch: spinning gradient needs a fresh frame every vblank on the active window
 +    if (Config::outlineSpinSeconds() > 0 && Config::outlineIsGradient() && window->hasOutline()
 +        && kwindow == KWin::effects->activeWindow()) {
 +        kwindow->addRepaintFull();
@@ -35,7 +35,7 @@ index a39f410..a0f277a 100644
  
  namespace
  {
-+    // NickLab patch: extra angle for the spinning gradient on the active window
++    // kalango patch: extra angle for the spinning gradient on the active window
 +    float spinAngle(const ShapeCorners::Window &window)
 +    {
 +        const double period = ShapeCorners::Config::outlineSpinSeconds();
@@ -67,7 +67,7 @@ index 4c34714..7b99c3d 100644
              <default>black</default>
          </entry>
 +        <entry name="OutlineSpinSeconds" type="Double">
-+            <label>NickLab: seconds per rotation of the active outline gradient (0 = static)</label>
++            <label>kalango: seconds per rotation of the active outline gradient (0 = static)</label>
 +            <default>0</default>
 +            <min>0</min>
 +            <max>120</max>
