@@ -114,7 +114,7 @@ function build(allApps) {
                         { label: "Record Screen", icon: "media-record", hint: "Spectacle › Record screen", run: { cmd: ["spectacle", "-R", "screen"] } },
                     ] },
                     { label: "Clipboard History", icon: "klipper", hint: "Klipper (clipboard in the system tray)", run: { cmd: ["qdbus6", "org.kde.klipper", "/klipper", "org.kde.klipper.klipper.showKlipperPopupMenu"] } },
-                    { label: "Emoji", icon: "preferences-desktop-emoticons", hint: "Emoji Selector (plasma-emojier)", run: { cmd: ["plasma-emojier"] } },
+                    { label: "Emoji", icon: "preferences-desktop-emoticons", keys: "Meta + .", hint: "Emoji Selector (plasma-emojier)", run: { cmd: ["plasma-emojier"] } },
                     { label: "Night Light", icon: "redshift-status-on", hint: "Toggle · settings in System Settings › Night Light", run: { shortcut: ["kwin", "Toggle Night Color"] } },
                     { label: "Do Not Disturb", icon: "notifications-disabled", hint: "Toggle · also a button in the notification list", run: { cmd: ["~/.local/bin/qs", "-c", "kalango", "ipc", "call", "notifications", "notificationsToggleDnd"] } },
                 ],
@@ -122,7 +122,7 @@ function build(allApps) {
             {
                 id: "settings", label: "Settings", glyph: g(0xF0493), hint: "System Settings and YaST",
                 children: [
-                    { label: "All System Settings", icon: "systemsettings", hint: "System Settings (KDE): your desktop and hardware", run: { cmd: ["systemsettings"] } },
+                    { label: "All System Settings", icon: "systemsettings", keys: "Meta + ,", hint: "System Settings (KDE): your desktop and hardware", run: { cmd: ["systemsettings"] } },
                     settingsPage("Display & Monitors", "kcm_kscreen", "preferences-desktop-display", "Display & Monitor"),
                     settingsPage("Sound", "kcm_pulseaudio", "audio-volume-high"),
                     settingsPage("Network", "kcm_networkmanagement", "network-wired", "Wi-Fi & Internet"),

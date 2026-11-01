@@ -157,7 +157,8 @@ ClippingRectangle {
                 Text {
                     Layout.fillWidth: true
                     visible: text !== ""
-                    text: card.n.body
+                    // Apps often send a raw "<" ("a <= b"); only real markup tags stay tags
+                    text: card.n.body.replace(/<(?!\/?(b|i|u|a|img|br)\b)/gi, "&lt;")
                     textFormat: Text.StyledText
                     color: Qt.rgba(0.9, 0.945, 0.925, 0.8)
                     linkColor: Theme.neon

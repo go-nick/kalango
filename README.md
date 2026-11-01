@@ -24,7 +24,7 @@ Gradient: `#2E6BFF → #3DFF9A`, left to right.
 | Piece | What it does |
 |---|---|
 | **NickLab color scheme** | Flat dark KDE colors from the palette |
-| **Nerd Fonts + `nickfont`** | 12 monospace Nerd Fonts and a live font switcher |
+| **Nerd Fonts + `nickfont`** | JetBrains Mono as the OS font, with `->` ligatures. 11 more monospace Nerd Fonts and a live font switcher |
 | **Krohnkite** (patched) | Auto-tiling, 10px gaps, borderless tiles; Meta+H/J/K/L focus also crosses monitors |
 | **KDE-Rounded-Corners** (patched) | 2px gradient border that slowly rotates on the active window |
 | **NickLab Konsole** | Translucent, blurred terminal with palette ANSI colors |

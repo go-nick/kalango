@@ -28,6 +28,7 @@ kalango RPMs that install system-wide defaults (`/usr/share`, `/etc/xdg`, `/etc/
 | What | Source | Installed to |
 |---|---|---|
 | Quickshell config (top bar, launcher, notifications) | `home/.config/quickshell/kalango/` | `~/.config/quickshell/kalango` |
+| OS font: JetBrains Mono for generic font requests | `home/.config/fontconfig/conf.d` | same under `~` |
 | Color scheme, Konsole profile | `home/.local/share/color-schemes`, `home/.local/share/konsole` | same under `~` |
 | Tools: `nickfont`, `nickkeys`, `nickborders-rebuild` | `home/.local/bin`, `home/.local/share/nicklab`, `home/.config/nicklab` | same under `~` |
 | Launchers, autostart | `home/.local/share/applications`, `home/.config/autostart` | same under `~` |
