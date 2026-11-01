@@ -63,8 +63,11 @@ echo ":: top bar"
 # any time: right-click the desktop > Add Panel.
 qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript \
     'panels().forEach(p => p.remove())' >/dev/null
-# Notifications sit under the bar's bell until kalango has its own
-kw plasmanotifyrc Notifications PopupPosition TopLeft
+
+echo ":: notifications"
+# The kalango shell is the notification server. Its D-Bus auto-start file
+# (~/.local/share/dbus-1/services) overrides Plasma's; reload so it counts now.
+busctl --user call org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus ReloadConfig
 
 echo ":: wallpapers"
 # Plasma's slideshow crossfades between the kalango wallpapers on every monitor

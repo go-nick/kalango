@@ -1,0 +1,7 @@
+# kalango: the Quickshell shell is the notification server. User services win
+# over /usr/share, so this replaces Plasma's and any other daemon's auto-start.
+# If an app notifies before the shell runs, D-Bus starts it; -n exits when it
+# already runs (it takes the name itself once the name is free).
+[D-BUS Service]
+Name=org.freedesktop.Notifications
+Exec=@HOME@/.local/bin/qs -c kalango -n -d

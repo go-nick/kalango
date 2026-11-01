@@ -1,8 +1,9 @@
 [Desktop Entry]
 Type=Application
 Name=Kalango Shell
-Comment=kalango Quickshell instance (launcher)
-Exec=@HOME@/.local/bin/qs -c kalango
+Comment=kalango Quickshell instance (top bar, launcher, notifications)
+# -n: D-Bus may already have started the shell for an early notification
+Exec=@HOME@/.local/bin/qs -c kalango -n
 Icon=org.quickshell
 NoDisplay=true
 Terminal=false
