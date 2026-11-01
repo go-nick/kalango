@@ -104,6 +104,10 @@ ks org.kde.plasma-systemmonitor.desktop _launch Ctrl+Escape # frees Meta+Escape
 ks ksmserver "Lock Session" Screensaver Meta+Escape        # frees Meta+L for Krohnkite
 ks kwin "Window Close" Alt+F4 Meta+Q
 ks kwin "Window Fullscreen" F11
+ks kwin KrohnkiteFocusNext                                 # frees Meta+. (Meta+H/J/K/L navigate)
+ks kwin KrohnkiteFocusPrev                                 # frees Meta+,
+ks org.kde.plasma.emojier.desktop _launch Meta+. Meta+Ctrl+Alt+Shift+Space
+ks systemsettings.desktop _launch Meta+,
 ks nickkeys.desktop _launch Meta+/
 
 echo ":: window rules"
