@@ -48,6 +48,26 @@ def folder(size):
             f'{glow}{flap}<path d="{OUTLINE}" {line} stroke-width="{(1 if size < 32 else 1.25) * k}"/></g>')
 
 
+# Trash can on the same grid: lid, handle, body, and contents when full
+TRASH_LID = "M12 18 H52 M25 18 V13 Q25 10 28 10 H36 Q39 10 39 13 V18"
+TRASH_BODY = "M16 18 L19 51 Q19.5 55 24 55 H40 Q44.5 55 45 51 L48 18"
+TRASH_FULL = "M26 28 V46 M32 28 V46 M38 28 V46"
+
+
+def trash(size, full):
+    """The trash can at one size, drawn like the folders: glass, glow, neon line."""
+    k = 64 / size
+    line = f'fill="none" stroke="{NEON}" stroke-linecap="round" stroke-linejoin="round"'
+    both = f"{TRASH_LID} {TRASH_BODY}"
+    glow = "" if size < 32 else (
+        f'<path d="{both}" {line} stroke-opacity=".12" stroke-width="{4 * k}"/>'
+        f'<path d="{both}" {line} stroke-opacity=".22" stroke-width="{2.5 * k}"/>')
+    contents = f'<path d="{TRASH_FULL}" {line} stroke-width="{k}"/>' if full else ""
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}">'
+            f'<g transform="scale({size / 64})"><path d="{TRASH_BODY} Z" fill="#000000" fill-opacity=".8"/>'
+            f'{glow}<path d="{both}" {line} stroke-width="{(1 if size < 32 else 1.25) * k}"/>{contents}</g></svg>')
+
+
 def redraw(svg):
     """Papirus's symbol, in neon, on kalango's folder."""
     size = int(re.search(r'<svg[^>]*\bwidth="(\d+)', svg).group(1))
@@ -112,6 +132,12 @@ def main():
                 continue
             out.mkdir(parents=True, exist_ok=True)
             (out / icon.name).write_text(redraw(text))
+        for icon in ("user-trash", "user-trash-full"):
+            source = places / f"{icon}.svg"
+            if source.exists():
+                size = int(re.search(r'<svg[^>]*\bwidth="(\d+)', source.read_text()).group(1))
+                out.mkdir(parents=True, exist_ok=True)
+                (out / source.name).write_text(trash(size, icon.endswith("full")))
         if out.exists() and papirus.has_section(name):
             dirs.append(name)
 
