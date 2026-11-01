@@ -43,4 +43,7 @@ echo ":: borders"
 echo ":: quickshell"
 "$REPO/scripts/build-quickshell.sh"
 
+echo ":: login screen (sudo)"
+"$REPO/scripts/install-login-theme.sh"
+
 "$REPO/apply.sh"
