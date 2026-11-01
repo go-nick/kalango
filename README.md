@@ -34,6 +34,7 @@ Gradient: `#2E6BFF → #3DFF9A`, left to right.
 | **Top bar** | Slim bar on every monitor. Left: notification bell with unread count, date and time. Middle: CPU, RAM, network, battery. Right: keyboard layout menu, audio, Wi-Fi, Bluetooth. Replaces the Plasma panel |
 | **Icons and cursor** | Papirus-Dark with blue→green gradient folders; Breeze cursor with a neon outline |
 | **Wallpapers** | Three original calango drawings, crossfading every 10 minutes on every monitor |
+| **Login and lock screen** | kalango SDDM theme with the same card and border; the lock screen crossfades the wallpapers |
 | **KRunner** (`Alt+Space`) | Search apps, files, settings, math |
 
 See [docs/shortcuts.md](docs/shortcuts.md) for the cheat sheet, and
@@ -58,6 +59,7 @@ home/        files copied into $HOME (@HOME@ is replaced with your home path)
 apply.sh     the exact KDE config keys kalango owns, written with kwriteconfig6
 install.sh   packages → files → fonts → krohnkite → borders → apply.sh
 scripts/     one installer per third-party piece
+sddm/        the kalango login screen theme
 patches/     kalango's changes to Krohnkite and KDE-Rounded-Corners
 wallpapers/  wallpaper sources (SVG), rendered to 4K PNGs at install
 packages.txt zypper packages
