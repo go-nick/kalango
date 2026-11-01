@@ -9,6 +9,8 @@ echo ":: global theme"
 # Registers kalango in System Settings > Global Theme and as the current theme
 kw kdeglobals KDE LookAndFeelPackage org.kalango.desktop
 plasma-apply-desktoptheme kalango >/dev/null
+kw kwinrc org.kde.kdecoration2 library org.kde.kwin.aurorae
+kw kwinrc org.kde.kdecoration2 theme __aurorae__svg__kalango
 
 echo ":: colors"
 plasma-apply-colorscheme kalango >/dev/null

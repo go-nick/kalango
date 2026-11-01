@@ -17,8 +17,8 @@ name=kalango
 cursorTheme=kalango-cursors
 
 [kwinrc][org.kde.kdecoration2]
-library=org.kde.breeze
-theme=Breeze
+library=org.kde.kwin.aurorae
+theme=__aurorae__svg__kalango
 
 [ksplashrc][KSplash]
 Theme=org.kde.breeze.desktop
