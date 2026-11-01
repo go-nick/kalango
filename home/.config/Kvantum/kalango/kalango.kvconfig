@@ -9,6 +9,11 @@ joined_inactive_tabs=true
 attach_active_tab=false
 group_toolbar_buttons=false
 composite=true
+translucent_windows=true
+blurring=true
+popup_blurring=true
+reduce_window_opacity=22
+reduce_menu_opacity=10
 menu_shadow_depth=6
 tooltip_shadow_depth=6
 splitter_width=7
@@ -41,6 +46,8 @@ link.visited.color=#30BA78
 
 [Hacks]
 respect_darkness=true
+transparent_dolphin_view=true
+blur_translucent=true
 
 [PanelButtonCommand]
 frame=true
