@@ -1,5 +1,5 @@
 // kalango top bar — three floating islands on every monitor.
-//   left:   notifications (opens the swaync notification list)
+//   left:   notifications bell (unread count, opens the notification list)
 //   center: CPU, RAM, network down/up (click opens System Monitor), battery
 //   right:  audio, Wi-Fi, Bluetooth, date + time
 // Every module opens the matching KDE settings page on click, so mouse users
@@ -130,13 +130,20 @@ Scope {
                 id: left
                 anchors { left: parent.left; leftMargin: 10; bottom: parent.bottom }
 
-                // Bell: click opens the notification list (swaync), middle-click
-                // opens KDE's per-app notification settings
+                // Bell: unread count, DND state. Click opens the notification list,
+                // right-click toggles Do not disturb, middle-click opens KDE's
+                // per-app notification settings
                 Module {
-                    icon: bar.ic(0xF009A)    // bell
+                    icon: Notifications.dnd ? bar.ic(0xF009B)            // bell-off
+                        : Notifications.unread > 0 ? bar.ic(0xF009E)     // bell-ring
+                        : bar.ic(0xF009A)                                // bell
+                    tint: Notifications.dnd ? Theme.solar : Notifications.unread > 0 ? Theme.neon : Theme.text
+                    label: Notifications.unread > 0 ? Notifications.unread : ""
+                    labelTint: tint
                     onClicked: mouse => {
-                        if (mouse.button === Qt.MiddleButton) bar.kcm("kcm_notifications");
-                        else Quickshell.execDetached(["swaync-client", "-t", "-sw"]);
+                        if (mouse.button === Qt.RightButton) Notifications.toggleDnd();
+                        else if (mouse.button === Qt.MiddleButton) bar.kcm("kcm_notifications");
+                        else Notifications.toggleList();
                     }
                 }
             }
