@@ -122,7 +122,14 @@ Scope {
             // Navigation stack of menu nodes; last element is the current one
             property var stack: Menu.pathTo(tree, root.startAt) || [tree]
             readonly property var node: stack[stack.length - 1]
+            // The action waiting for a second Enter; cancels itself after a few seconds
             property var confirming: null
+            readonly property int confirmTime: 4000
+            Timer {
+                interval: win.confirmTime
+                running: win.confirming !== null
+                onTriggered: win.confirming = null
+            }
 
             // 0 = hidden, 1 = shown; drives the open/close animation
             property real reveal: 0
@@ -339,6 +346,45 @@ Scope {
                             readonly property bool asking: win.confirming === item
                             width: list.width
                             height: list.rowHeight
+
+                            // First Enter on a confirm action: shake, pulse, and a countdown
+                            transform: Translate { id: nudge }
+                            onAskingChanged: if (asking) shake.restart()
+                            SequentialAnimation {
+                                id: shake
+                                NumberAnimation { target: nudge; property: "x"; to: -6; duration: 45 }
+                                NumberAnimation { target: nudge; property: "x"; to: 6; duration: 70 }
+                                NumberAnimation { target: nudge; property: "x"; to: -3; duration: 60 }
+                                NumberAnimation { target: nudge; property: "x"; to: 0; duration: 45 }
+                            }
+                            Rectangle {
+                                anchors.fill: parent
+                                visible: row.asking
+                                radius: 8
+                                color: Qt.rgba(1, 0.82, 0.25, 0.12)
+                                border.width: 1
+                                border.color: Theme.solar
+                                SequentialAnimation on opacity {
+                                    running: row.asking
+                                    loops: Animation.Infinite
+                                    NumberAnimation { from: 1; to: 0.45; duration: 500; easing.type: Easing.InOutSine }
+                                    NumberAnimation { from: 0.45; to: 1; duration: 500; easing.type: Easing.InOutSine }
+                                }
+                            }
+                            Rectangle {
+                                id: countdown
+                                anchors { left: parent.left; bottom: parent.bottom; leftMargin: 4; bottomMargin: 2 }
+                                visible: row.asking
+                                height: 2
+                                radius: 1
+                                color: Theme.solar
+                                NumberAnimation on width {
+                                    running: row.asking
+                                    from: row.width - 8
+                                    to: 0
+                                    duration: win.confirmTime
+                                }
+                            }
 
                             RowLayout {
                                 anchors { fill: parent; leftMargin: 14; rightMargin: 14 }
