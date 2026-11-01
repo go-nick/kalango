@@ -183,6 +183,14 @@ indicator.size=9
 
 [HeaderSection]
 inherits=PanelButtonCommand
+frame.element=header
+interior.element=header
+frame.top=0
+frame.left=0
+frame.right=0
+frame.bottom=1
+text.press.color=#3DFF9A
+text.toggle.color=#3DFF9A
 
 [SizeGrip]
 indicator.element=sizegrip
