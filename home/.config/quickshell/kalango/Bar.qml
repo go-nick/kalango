@@ -1,7 +1,7 @@
 // kalango top bar — three floating islands on every monitor.
-//   left:   notifications bell (unread count, opens the notification list)
+//   left:   notifications bell (unread count, opens the notification list), date + time
 //   center: CPU, RAM, network down/up (click opens System Monitor), battery
-//   right:  audio, Wi-Fi, Bluetooth, date + time
+//   right:  keyboard layout menu, audio, Wi-Fi, Bluetooth
 // Every module opens the matching KDE settings page on click, so mouse users
 // always have a way in.
 import QtQuick
@@ -91,6 +91,48 @@ Scope {
         }
     }
 
+    // One row in a bar menu: check mark, label, hint on the right
+    component MenuRow: Rectangle {
+        id: row
+        property bool mark: false
+        property string text
+        property string hint
+        signal clicked()
+        implicitHeight: 32
+        radius: 8
+        color: rowArea.containsMouse ? Theme.void_ : "transparent"
+        RowLayout {
+            anchors { fill: parent; leftMargin: 10; rightMargin: 10 }
+            spacing: 8
+            Text {
+                text: row.mark ? String.fromCodePoint(0xF012C) : ""    // check
+                color: Theme.neon
+                font.pixelSize: 14
+                Layout.preferredWidth: 16
+            }
+            Text {
+                text: row.text
+                color: rowArea.containsMouse ? Theme.neon : Theme.text
+                font.pixelSize: 13
+                font.bold: row.mark
+                elide: Text.ElideRight
+                Layout.fillWidth: true
+            }
+            Text {
+                text: row.hint
+                color: Theme.muted
+                font.pixelSize: 11
+            }
+        }
+        MouseArea {
+            id: rowArea
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: row.clicked()
+        }
+    }
+
     // A floating pill of modules; the wallpaper shows between islands
     component Island: Rectangle {
         default property alias content: modules.data
@@ -146,6 +188,13 @@ Scope {
                         else Notifications.toggleList();
                     }
                 }
+
+                // Date + time, next to the notifications; click toggles the full date
+                Module {
+                    property bool full: false
+                    label: Qt.formatDateTime(clock.date, full ? "dddd, d MMMM yyyy  HH:mm" : "ddd d MMM  HH:mm")
+                    onClicked: full = !full
+                }
             }
 
             // ── center: system meters, battery at their right ──
@@ -193,6 +242,72 @@ Scope {
                 id: right
                 anchors { right: parent.right; rightMargin: 10; bottom: parent.bottom }
 
+                // Keyboard layout: click opens a menu of the configured layouts,
+                // scroll cycles them, right-click opens keyboard settings
+                Module {
+                    id: kbd
+                    visible: KeyboardLayouts.active !== null
+                    icon: bar.ic(0xF030C)    // keyboard
+                    label: KeyboardLayouts.active ? KeyboardLayouts.active.code.toUpperCase() : ""
+                    onClicked: mouse => {
+                        if (mouse.button === Qt.RightButton) bar.kcm("kcm_keyboard");
+                        else menu.visible = !menu.visible;
+                    }
+                    onScrolled: delta => delta > 0 ? KeyboardLayouts.previous() : KeyboardLayouts.next()
+
+                    PopupWindow {
+                        id: menu
+                        anchor.item: kbd
+                        anchor.edges: Edges.Bottom
+                        anchor.gravity: Edges.Bottom
+                        anchor.margins.top: 6
+                        // Closes on a click anywhere else
+                        grabFocus: true
+                        implicitWidth: 260
+                        implicitHeight: entries.implicitHeight + 16
+                        color: "transparent"
+
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: Theme.radius + 4
+                            color: "#000000"
+                            border.width: 1
+                            border.color: Theme.pine
+
+                            ColumnLayout {
+                                id: entries
+                                anchors { left: parent.left; right: parent.right; top: parent.top; margins: 8 }
+                                spacing: 2
+
+                                Repeater {
+                                    model: KeyboardLayouts.layouts
+                                    MenuRow {
+                                        required property var modelData
+                                        required property int index
+                                        Layout.fillWidth: true
+                                        mark: index === KeyboardLayouts.current
+                                        text: modelData.name
+                                        hint: modelData.code.toUpperCase()
+                                        onClicked: { KeyboardLayouts.set(index); menu.visible = false; }
+                                    }
+                                }
+                                Rectangle {
+                                    Layout.fillWidth: true
+                                    Layout.margins: 4
+                                    implicitHeight: 1
+                                    color: Theme.pine
+                                }
+                                MenuRow {
+                                    Layout.fillWidth: true
+                                    text: "Add or change layouts…"
+                                    hint: "Meta+Alt+K"
+                                    onClicked: { menu.visible = false; bar.kcm("kcm_keyboard"); }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // Audio: scroll = volume, right-click = mute, click = sound settings
                 Module {
                     readonly property var audio: bar.sink?.audio ?? null
@@ -236,12 +351,6 @@ Scope {
                     }
                 }
 
-                // Date + time; click toggles the full date
-                Module {
-                    property bool full: false
-                    label: Qt.formatDateTime(clock.date, full ? "dddd, d MMMM yyyy  HH:mm" : "ddd d MMM  HH:mm")
-                    onClicked: full = !full
-                }
             }
         }
     }
