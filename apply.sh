@@ -28,7 +28,7 @@ echo ":: app style"
 APP_OPACITY=50
 kw kdeglobals KDE widgetStyle kvantum
 sed -i "s/^reduce_window_opacity=.*/reduce_window_opacity=$((100 - APP_OPACITY))/" "$HOME/.config/Kvantum/kalango/kalango.kvconfig"
-kw "$HOME/.local/share/konsole/NickLab.colorscheme" General Opacity "$(awk "BEGIN { print $APP_OPACITY / 100 }")"
+kw "$HOME/.local/share/konsole/kalango.colorscheme" General Opacity "$(awk "BEGIN { print $APP_OPACITY / 100 }")"
 dbus-send --session --type=signal /KGlobalSettings org.kde.KGlobalSettings.notifyChange int32:2 int32:0
 
 echo ":: fonts"
@@ -111,7 +111,7 @@ for kv in "SlidePaths $WALLS/" "SlideInterval 600" "FillMode 2"; do
 done
 
 echo ":: konsole"
-kw konsolerc "Desktop Entry" DefaultProfile NickLab.profile
+kw konsolerc "Desktop Entry" DefaultProfile kalango.profile
 
 echo ":: shortcuts"
 # Set live through kglobalaccel (no logout). The helper refuses keys another
