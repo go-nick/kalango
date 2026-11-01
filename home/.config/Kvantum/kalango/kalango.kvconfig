@@ -9,6 +9,7 @@ joined_inactive_tabs=true
 attach_active_tab=false
 group_toolbar_buttons=false
 composite=true
+animate_states=true
 translucent_windows=true
 blurring=true
 popup_blurring=true
