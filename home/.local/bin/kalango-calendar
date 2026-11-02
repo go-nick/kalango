@@ -1,0 +1,5 @@
+#!/bin/sh
+# Open the calendar. If it's already open, reopen it: a Wayland app can't raise its own window.
+qs=${HOME}/.local/bin/qs
+"$qs" -c kalango-calendar kill >/dev/null 2>&1
+exec "$qs" -c kalango-calendar -n -d
