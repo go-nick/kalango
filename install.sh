@@ -14,6 +14,8 @@ echo ":: files -> \$HOME"
     dest="$HOME/${f#./}"
     # Never clobber favorites someone already starred
     [[ "$f" == */keys-favorites.json && -e "$dest" ]] && continue
+    # Wave writes to its own settings; only new users get kalango's
+    [[ "$f" == */waveterm/settings.json && -e "$dest" ]] && continue
     mkdir -p "$(dirname "$dest")"
     # Dev setups symlink repo dirs into $HOME; writing a file onto itself would empty it
     [[ "$(realpath -m "$dest")" == "$(realpath "$REPO/home/$f")" ]] && continue
