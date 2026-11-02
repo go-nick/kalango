@@ -29,6 +29,9 @@ secret-tool
 # xprop: asks KWin to blur behind Wave Terminal
 xprop
 
+# xdg-settings, xdg-mime: set the default browser
+xdg-utils
+
 # build tools for KDE-Rounded-Corners
 git
 cmake
