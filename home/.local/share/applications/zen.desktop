@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Zen Browser
+GenericName=Web Browser
+Comment=Browse the web
+Exec=@HOME@/.local/opt/zen/zen %u
+Icon=@HOME@/.local/opt/zen/browser/chrome/icons/default/default128.png
+Terminal=false
+Categories=Network;WebBrowser;
+MimeType=text/html;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;
+StartupWMClass=zen
+StartupNotify=true
