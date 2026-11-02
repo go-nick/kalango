@@ -13,4 +13,5 @@ ShellRoot {
     Bar {}
     NotificationPopups {}
     NotificationList {}
+    CalendarPanel {}
 }
