@@ -43,6 +43,9 @@ echo ":: borders"
 echo ":: quickshell"
 "$REPO/scripts/build-quickshell.sh"
 
+echo ":: calendar"
+"$REPO/scripts/install-calendar.sh"
+
 echo ":: login screen (sudo)"
 "$REPO/scripts/install-login-theme.sh"
 
