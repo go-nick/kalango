@@ -51,6 +51,9 @@ echo ":: calendar"
 echo ":: wave terminal (sudo)"
 "$REPO/scripts/install-wave.sh"
 
+echo ":: zen browser"
+"$REPO/scripts/install-zen.sh"
+
 echo ":: login screen (sudo)"
 "$REPO/scripts/install-login-theme.sh"
 

@@ -21,6 +21,7 @@ Build tools in that list are only needed until the pieces in group 2 ship as RPM
 | KWin Scale effect, kalango copy | follows installed KWin | `scripts/kwin-scale-fade-only.sh` | `~/.local/share/kwin/effects/scale` | Launcher fades instead of zooming. Becomes a patch or goes away (#6) |
 | Flight Deck Calendar + `patches/flight-deck-qt612-names.patch` | v1.1.0 | `scripts/install-calendar.sh` | `~/.config/quickshell/kalango-calendar/flightdeck` | Calendar panel, GPL-3.0, kept out of this repo. The patch renames what clashes on Qt 6.12 |
 | Wave Terminal | v0.14.5 | `scripts/install-wave.sh` (official release RPM, unsigned, checksum pinned) | `/opt/Wave` (tracked by rpm, but not updated by zypper) | Terminal. Runs under XWayland for blur |
+| Zen Browser | 1.24b | `scripts/install-zen.sh` (official release tarball, checksum pinned) | `~/.local/opt/zen` | Browser, not customized. Not tracked by rpm. Needs an OBS wrapper |
 
 ## 3. kalango's own files
 
