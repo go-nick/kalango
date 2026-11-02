@@ -1,0 +1,11 @@
+{
+    "bg@kalango": {
+        "display:name": "kalango",
+        "display:order": 0,
+        "bg:*": true,
+        "bg": "#000000",
+        "bg:opacity": 0,
+        "bg:bordercolor": "#0C322C",
+        "bg:activebordercolor": "#3DFF9A"
+    }
+}

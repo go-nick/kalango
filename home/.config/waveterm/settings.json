@@ -2,5 +2,6 @@
     "window:transparent": true,
     "window:opacity": 0.5,
     "term:theme": "kalango",
-    "term:transparency": 0.5
+    "term:transparency": 0.5,
+    "tab:background": "bg@kalango"
 }
