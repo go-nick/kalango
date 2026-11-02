@@ -48,6 +48,9 @@ echo ":: quickshell"
 echo ":: calendar"
 "$REPO/scripts/install-calendar.sh"
 
+echo ":: wave terminal (sudo)"
+"$REPO/scripts/install-wave.sh"
+
 echo ":: login screen (sudo)"
 "$REPO/scripts/install-login-theme.sh"
 
