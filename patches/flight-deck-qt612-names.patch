@@ -1,0 +1,255 @@
+--- a/Panel.qml	2026-11-02 08:48:50.782491416 -0500
++++ b/Panel.qml	2026-11-02 08:48:50.784968718 -0500
+@@ -101,13 +101,13 @@
+     readonly property var previewSettings: showSettings ? settingsDraft : appliedSettings
+     readonly property int motionDuration: previewSettings.animations ? 140 : 0
+     readonly property real textScale: Number(previewSettings.textScale || 1)
+-    readonly property var palette: SettingsModel.palette(previewSettings.theme, {
+-        background: Color.background,
+-        surface: Color.popups.background,
+-        foreground: bar ? bar.foreground : Color.foreground,
+-        muted: Color.muted,
+-        accent: Color.accent,
+-        urgent: Color.urgent
++    readonly property var fdPalette: SettingsModel.palette(previewSettings.theme, {
++        background: FdColor.background,
++        surface: FdColor.popups.background,
++        foreground: bar ? bar.foreground : FdColor.foreground,
++        muted: FdColor.muted,
++        accent: FdColor.accent,
++        urgent: FdColor.urgent
+     })
+     readonly property string contentFontFamily: bar ? bar.fontFamily : Style.font.family
+     readonly property var events: CalendarModel.visibleCalendarEvents(cachedEvents, previewSettings.hiddenCalendars)
+@@ -1126,14 +1126,14 @@
+             }
+             Rectangle {
+                 anchors.fill: parent
+-                color: root.palette.background
++                color: root.fdPalette.background
+                 Column {
+                     anchors.fill: parent
+                     Rectangle {
+                         width: parent.width
+                         height: Style.space(58)
+-                        color: root.palette.surface
+-                        border.color: root.palette.border
++                        color: root.fdPalette.surface
++                        border.color: root.fdPalette.border
+                         border.width: 0
+                         Text {
+                             textFormat: Text.PlainText
+@@ -1141,7 +1141,7 @@
+                             anchors.leftMargin: Style.space(18)
+                             anchors.verticalCenter: parent.verticalCenter
+                             text: "FLIGHT DECK"
+-                            color: root.palette.accent
++                            color: root.fdPalette.accent
+                             font.family: root.contentFontFamily
+                             font.pixelSize: Style.font.body * root.textScale
+                             font.bold: true
+@@ -1166,8 +1166,8 @@
+                                     width: Style.space(108)
+                                     height: Style.space(34)
+                                     radius: Style.space(6)
+-                                    color: root.activeTab === modelData.key ? root.palette.accent : "transparent"
+-                                    border.color: root.activeTab === modelData.key ? root.palette.accent : root.palette.border
++                                    color: root.activeTab === modelData.key ? root.fdPalette.accent : "transparent"
++                                    border.color: root.activeTab === modelData.key ? root.fdPalette.accent : root.fdPalette.border
+                                     border.width: 1
+                                     Behavior on color {
+                                         enabled: root.motionDuration > 0
+@@ -1179,7 +1179,7 @@
+                                         textFormat: Text.PlainText
+                                         anchors.centerIn: parent
+                                         text: modelData.label
+-                                        color: root.activeTab === modelData.key ? root.palette.background : root.palette.foreground
++                                        color: root.activeTab === modelData.key ? root.fdPalette.background : root.fdPalette.foreground
+                                         font.family: root.contentFontFamily
+                                         font.pixelSize: Style.font.caption * root.textScale
+                                         font.bold: true
+@@ -1199,14 +1199,14 @@
+                             Text {
+                                 textFormat: Text.PlainText
+                                 text: root.updateStatus
+-                                color: root.demoData ? "#e0af68" : root.syncing ? root.palette.accent : root.updateNeedsAttention ? root.palette.urgent : root.palette.muted
++                                color: root.demoData ? "#e0af68" : root.syncing ? root.fdPalette.accent : root.updateNeedsAttention ? root.fdPalette.urgent : root.fdPalette.muted
+                                 font.family: root.contentFontFamily
+                                 font.pixelSize: Style.font.caption * root.textScale
+                             }
+                             Text {
+                                 textFormat: Text.PlainText
+                                 text: "New  n"
+-                                color: root.showEditor && root.editorMode === "create" ? root.palette.accent : root.palette.foreground
++                                color: root.showEditor && root.editorMode === "create" ? root.fdPalette.accent : root.fdPalette.foreground
+                                 font.family: root.contentFontFamily
+                                 font.pixelSize: Style.font.caption * root.textScale
+                                 font.bold: true
+@@ -1218,7 +1218,7 @@
+                             Text {
+                                 textFormat: Text.PlainText
+                                 text: "Refresh  r"
+-                                color: root.syncing ? root.palette.muted : root.palette.foreground
++                                color: root.syncing ? root.fdPalette.muted : root.fdPalette.foreground
+                                 font.family: root.contentFontFamily
+                                 font.pixelSize: Style.font.caption * root.textScale
+                                 font.bold: true
+@@ -1231,7 +1231,7 @@
+                             Text {
+                                 textFormat: Text.PlainText
+                                 text: "Settings  s"
+-                                color: root.showSettings ? root.palette.accent : root.palette.foreground
++                                color: root.showSettings ? root.fdPalette.accent : root.fdPalette.foreground
+                                 font.family: root.contentFontFamily
+                                 font.pixelSize: Style.font.caption * root.textScale
+                                 font.bold: true
+@@ -1243,7 +1243,7 @@
+                             Text {
+                                 textFormat: Text.PlainText
+                                 text: "Help  ?"
+-                                color: root.showHelp ? root.palette.accent : root.palette.foreground
++                                color: root.showHelp ? root.fdPalette.accent : root.fdPalette.foreground
+                                 font.family: root.contentFontFamily
+                                 font.pixelSize: Style.font.caption * root.textScale
+                                 font.bold: true
+@@ -1267,7 +1267,7 @@
+                             visible: !root.showSettings && !root.showSetup
+                             view: root.activeTab
+                             cursorDate: root.cursorDate
+-                            palette: root.palette
++                            palette: root.fdPalette
+                             fontFamily: root.contentFontFamily
+                             textScale: root.textScale
+                             motionDuration: root.motionDuration
+@@ -1287,7 +1287,7 @@
+                             events: root.dayEvents
+                             selectedEvent: root.selectedEvent
+                             selectedUid: root.selectedUid
+-                            palette: root.palette
++                            palette: root.fdPalette
+                             fontFamily: root.contentFontFamily
+                             textScale: root.textScale
+                             density: root.previewSettings.density
+@@ -1320,7 +1320,7 @@
+                             startHour: root.gridStartHour
+                             endHour: root.gridEndHour
+                             hourHeight: root.hourHeight
+-                            palette: root.palette
++                            palette: root.fdPalette
+                             fontFamily: root.contentFontFamily
+                             textScale: root.textScale
+                             motionDuration: root.motionDuration
+@@ -1356,7 +1356,7 @@
+                             eventData: root.editorSource
+                             calendars: root.editableCalendars()
+                             mode: root.editorMode
+-                            palette: root.palette
++                            palette: root.fdPalette
+                             fontFamily: root.contentFontFamily
+                             textScale: root.textScale
+                             busy: root.mutationBusy || root.accountBusy
+@@ -1383,7 +1383,7 @@
+                             anchors.bottomMargin: Style.space(18)
+                             width: Math.min(parent.width - Style.space(40), Style.space(560))
+                             z: 35
+-                            palette: root.palette
++                            palette: root.fdPalette
+                             fontFamily: root.contentFontFamily
+                             textScale: root.textScale
+                             reason: root.pendingCopiedOriginalOffline ? "The source account is offline. The copy is saved and the original remains." : root.pendingCopiedOriginalReason
+@@ -1402,8 +1402,8 @@
+                             width: Style.space(560)
+                             height: Style.space(240)
+                             radius: Style.space(12)
+-                            color: root.palette.surface
+-                            border.color: root.errorText !== "" ? root.palette.urgent : root.palette.border
++                            color: root.fdPalette.surface
++                            border.color: root.errorText !== "" ? root.fdPalette.urgent : root.fdPalette.border
+                             border.width: 1
+                             Column {
+                                 anchors.fill: parent
+@@ -1412,7 +1412,7 @@
+                                 Text {
+                                     textFormat: Text.PlainText
+                                     text: root.errorText !== "" ? "CALENDAR UNAVAILABLE" : root.filteredEmpty ? "NO VISIBLE EVENTS" : "YOUR CALENDAR COCKPIT IS READY"
+-                                    color: root.errorText !== "" ? root.palette.urgent : root.palette.accent
++                                    color: root.errorText !== "" ? root.fdPalette.urgent : root.fdPalette.accent
+                                     font.family: root.contentFontFamily
+                                     font.pixelSize: Style.font.title * root.textScale
+                                     font.bold: true
+@@ -1421,7 +1421,7 @@
+                                     textFormat: Text.PlainText
+                                     width: parent.width
+                                     text: root.errorText !== "" ? root.errorText : root.filteredEmpty ? "Every cached calendar in this period is hidden. Open Calendar settings to show one or more." : "Connect Google Calendar or Outlook in Settings. Read-only access is the default."
+-                                    color: root.palette.foreground
++                                    color: root.fdPalette.foreground
+                                     font.family: root.contentFontFamily
+                                     font.pixelSize: Style.font.bodySmall * root.textScale
+                                     wrapMode: Text.Wrap
+@@ -1430,12 +1430,12 @@
+                                     width: parent.width
+                                     height: Style.space(44)
+                                     radius: Style.space(7)
+-                                    color: root.palette.accent
++                                    color: root.fdPalette.accent
+                                     Text {
+                                         textFormat: Text.PlainText
+                                         anchors.centerIn: parent
+                                         text: root.errorText !== "" ? "r  Try again" : root.filteredEmpty ? "c  Calendar visibility" : "c  Connect calendars"
+-                                        color: root.palette.background
++                                        color: root.fdPalette.background
+                                         font.family: root.contentFontFamily
+                                         font.pixelSize: Style.font.bodySmall * root.textScale
+                                         font.bold: true
+@@ -1450,13 +1450,13 @@
+                                     height: Style.space(40)
+                                     radius: Style.space(7)
+                                     color: "transparent"
+-                                    border.color: root.palette.border
++                                    border.color: root.fdPalette.border
+                                     border.width: 1
+                                     Text {
+                                         textFormat: Text.PlainText
+                                         anchors.centerIn: parent
+                                         text: root.errorText !== "" ? "c  Calendar settings" : "Load fictional demo data"
+-                                        color: root.palette.foreground
++                                        color: root.fdPalette.foreground
+                                         font.family: root.contentFontFamily
+                                         font.pixelSize: Style.font.caption * root.textScale
+                                         font.bold: true
+@@ -1478,7 +1478,7 @@
+                             providers: root.setupProviders
+                             providerHealth: root.providers
+                             calendars: root.calendars
+-                            palette: root.palette
++                            palette: root.fdPalette
+                             fontFamily: root.contentFontFamily
+                             textScale: root.textScale
+                             pendingReset: root.pendingReset
+@@ -1510,7 +1510,7 @@
+                             z: 30
+                             provider: root.setupProvider
+                             providerState: root.providerSetup(root.setupProvider)
+-                            palette: root.palette
++                            palette: root.fdPalette
+                             fontFamily: root.contentFontFamily
+                             textScale: root.textScale
+                             busy: root.accountBusy
+@@ -1535,7 +1535,7 @@
+                             height: Math.min(parent.height - Style.space(80), Style.space(420))
+                             visible: root.showHelp
+                             z: 40
+-                            palette: root.palette
++                            palette: root.fdPalette
+                             fontFamily: root.contentFontFamily
+                             textScale: root.textScale
+                         }
+@@ -1548,7 +1548,7 @@
+                                 textFormat: Text.PlainText
+                                 anchors.centerIn: parent
+                                 text: "Loading local calendar"
+-                                color: root.palette.accent
++                                color: root.fdPalette.accent
+                                 font.family: root.contentFontFamily
+                                 font.pixelSize: Style.font.body * root.textScale
+                                 font.bold: true

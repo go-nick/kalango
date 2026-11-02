@@ -19,6 +19,7 @@ Build tools in that list are only needed until the pieces in group 2 ship as RPM
 | Krohnkite + `patches/krohnkite-cross-screen-focus.patch` | 0.9.9.2 | `scripts/install-krohnkite.sh` | `~/.local/share/kwin/scripts` | Tiling (KWin script) |
 | Nerd Fonts (12 monospace families) | latest release, **unpinned** | `scripts/install-fonts.sh` | `~/.local/share/fonts/NerdFonts` | Pin a version when packaging; check which already exist in openSUSE repos |
 | KWin Scale effect, kalango copy | follows installed KWin | `scripts/kwin-scale-fade-only.sh` | `~/.local/share/kwin/effects/scale` | Launcher fades instead of zooming. Becomes a patch or goes away (#6) |
+| Flight Deck Calendar + `patches/flight-deck-qt612-names.patch` | v1.1.0 | `scripts/install-calendar.sh` | `~/.config/quickshell/kalango-calendar/flightdeck` | Calendar panel, GPL-3.0, kept out of this repo. The patch renames what clashes on Qt 6.12 |
 
 ## 3. kalango's own files
 
@@ -27,10 +28,10 @@ kalango RPMs that install system-wide defaults (`/usr/share`, `/etc/xdg`, `/etc/
 
 | What | Source | Installed to |
 |---|---|---|
-| Quickshell config (top bar, launcher, notifications) | `home/.config/quickshell/kalango/` | `~/.config/quickshell/kalango` |
+| Quickshell config (top bar, launcher, notifications) and calendar app | `home/.config/quickshell/kalango/`, `home/.config/quickshell/kalango-calendar/` | same under `~` |
 | OS font: JetBrains Mono for generic font requests | `home/.config/fontconfig/conf.d` | same under `~` |
 | Color scheme, Konsole profile | `home/.local/share/color-schemes`, `home/.local/share/konsole` | same under `~` |
-| Tools: `kalango-font`, `kalango-keys`, `kalango-borders-rebuild` | `home/.local/bin`, `home/.local/share/kalango`, `home/.config/kalango` | same under `~` |
+| Tools: `kalango-font`, `kalango-keys`, `kalango-borders-rebuild`, `kalango-calendar` | `home/.local/bin`, `home/.local/share/kalango`, `home/.config/kalango` | same under `~` |
 | Launchers, autostart | `home/.local/share/applications`, `home/.config/autostart` | same under `~` |
 | Notification server auto-start (D-Bus, overrides Plasma's) | `home/.local/share/dbus-1/services` | same under `~` |
 | Wallpapers (24 drawings) | `wallpapers/*.svg`, rendered by `scripts/install-wallpapers.sh` | `~/.local/share/wallpapers/kalango` (4K PNG) |

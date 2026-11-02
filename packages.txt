@@ -22,6 +22,10 @@ dbus-1-tools
 # pw-play: notification sounds
 pipewire-tools
 
+# calendar (Flight Deck): runs its backend, keeps sign-in tokens in the keyring
+python3
+secret-tool
+
 # build tools for KDE-Rounded-Corners
 git
 cmake

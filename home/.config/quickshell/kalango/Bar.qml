@@ -1,5 +1,5 @@
 // kalango top bar — three floating islands on every monitor.
-//   left:   notifications bell (unread count, opens the notification list), date + time
+//   left:   notifications bell (unread count, opens the notification list), date + time (opens the calendar)
 //   center: CPU, RAM, network down/up (click opens System Monitor), battery
 //   right:  keyboard layout menu, audio, Wi-Fi, Bluetooth
 // Every module opens the matching KDE settings page on click, so mouse users
@@ -234,11 +234,15 @@ Scope {
                     onClicked: Notifications.toggleList()
                 }
 
-                // Date + time, next to the notifications; click toggles the full date
+                // Date + time, next to the notifications; click opens the calendar,
+                // right-click toggles the full date
                 Module {
                     property bool full: false
                     label: Qt.formatDateTime(clock.date, full ? "dddd, d MMMM yyyy  HH:mm" : "ddd d MMM  HH:mm")
-                    onClicked: full = !full
+                    onClicked: mouse => {
+                        if (mouse.button === Qt.RightButton) full = !full;
+                        else Quickshell.execDetached([Quickshell.env("HOME") + "/.local/bin/kalango-calendar"]);
+                    }
                 }
             }
 

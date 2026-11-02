@@ -1,0 +1,11 @@
+#!/bin/sh
+# Open the calendar. If it's already open, reopen it: a Wayland app can't raise its own window.
+qs=${HOME}/.local/bin/qs
+"$qs" -c kalango-calendar kill >/dev/null 2>&1
+# The new instance gives up while the old one is still exiting
+tries=0
+while "$qs" -c kalango-calendar list 2>/dev/null | grep -q 'Process ID' && [ "$tries" -lt 40 ]; do
+    sleep 0.05
+    tries=$((tries + 1))
+done
+exec "$qs" -c kalango-calendar -n -d

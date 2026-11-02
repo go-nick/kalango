@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Calendar
+GenericName=Flight Deck Calendar
+Comment=Today and week view of your calendars
+Exec=@HOME@/.local/bin/kalango-calendar
+Icon=office-calendar
+Terminal=false
+Categories=Office;Calendar;
+StartupWMClass=kalango-calendar
