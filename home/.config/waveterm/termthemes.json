@@ -1,0 +1,28 @@
+{
+    "kalango": {
+        "display:name": "kalango",
+        "display:order": 0,
+        "black": "#141C23",
+        "brightBlack": "#46555A",
+        "red": "#FF4D6D",
+        "brightRed": "#FF7891",
+        "green": "#30BA78",
+        "brightGreen": "#3DFF9A",
+        "yellow": "#FFD23F",
+        "brightYellow": "#FFE178",
+        "blue": "#2E6BFF",
+        "brightBlue": "#6E96FF",
+        "magenta": "#AA6EFF",
+        "brightMagenta": "#C8A0FF",
+        "cyan": "#3CDCDC",
+        "brightCyan": "#82F0F0",
+        "white": "#C8D6D0",
+        "brightWhite": "#E6F1EC",
+        "gray": "#7A8C85",
+        "cmdtext": "#E6F1EC",
+        "foreground": "#E6F1EC",
+        "background": "#000000",
+        "cursor": "#3DFF9A",
+        "selectionBackground": "#0C322C"
+    }
+}

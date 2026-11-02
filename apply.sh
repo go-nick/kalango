@@ -155,6 +155,21 @@ case ",$rules," in
 esac
 kw $R General rules "$rules"
 
+# Wave runs under XWayland (see kalango-wave), where it isn't given focus and picks its
+# own position. Focus comes from this rule, the monitor from the kalango-wave-placement script.
+kw kwinrc Plugins kalango-wave-placementEnabled true
+id=kalango-wave
+kw $R $id Description "Wave Terminal"
+kw $R $id wmclass wave;                 kw $R $id wmclassmatch 1
+kw $R $id fsplevel 0;                   kw $R $id fsplevelrule 2
+rules=$(kreadconfig6 --file $R --group General --key rules)
+case ",$rules," in
+    *",$id,"*) ;;
+    *) rules="${rules:+$rules,}$id"
+       kw $R General count "$(( $(kreadconfig6 --file $R --group General --key count --default 0) + 1 ))" ;;
+esac
+kw $R General rules "$rules"
+
 echo ":: reload"
 qdbus6 org.kde.KWin /KWin reconfigure >/dev/null 2>&1 || true
 # Effects only re-read their settings when reconfigured individually

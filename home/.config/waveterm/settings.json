@@ -1,0 +1,8 @@
+{
+    "window:transparent": true,
+    "window:opacity": 0.15,
+    "term:theme": "kalango",
+    "term:transparency": 0.75,
+    "tab:background": "bg@kalango",
+    "window:tilegapsize": 16
+}

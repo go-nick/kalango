@@ -1,0 +1,11 @@
+{
+    "KPackageStructure": "KWin/Script",
+    "KPlugin": {
+        "Id": "kalango-wave-placement",
+        "Name": "kalango: Wave placement",
+        "Description": "Opens Wave Terminal on the active monitor",
+        "License": "Apache-2.0"
+    },
+    "X-Plasma-API": "javascript",
+    "X-Plasma-MainScript": "code/main.js"
+}
