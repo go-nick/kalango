@@ -26,6 +26,9 @@ pipewire-tools
 python3
 secret-tool
 
+# xprop: asks KWin to blur behind Wave Terminal
+xprop
+
 # build tools for KDE-Rounded-Corners
 git
 cmake
