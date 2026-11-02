@@ -3,4 +3,4 @@ __pycache__/
 .directory
 
 # Flight Deck Calendar, downloaded by scripts/install-calendar.sh
-home/.config/quickshell/kalango/flightdeck/
+home/.config/quickshell/kalango-calendar/flightdeck/

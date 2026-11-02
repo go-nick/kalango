@@ -6,7 +6,7 @@ set -euo pipefail
 
 VERSION=v1.1.0
 REPO=$(cd "$(dirname "$0")/.." && pwd)
-DEST="$HOME/.config/quickshell/kalango/flightdeck"
+DEST="$HOME/.config/quickshell/kalango-calendar/flightdeck"
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 

@@ -241,7 +241,7 @@ Scope {
                     label: Qt.formatDateTime(clock.date, full ? "dddd, d MMMM yyyy  HH:mm" : "ddd d MMM  HH:mm")
                     onClicked: mouse => {
                         if (mouse.button === Qt.RightButton) full = !full;
-                        else Calendar.toggle(win.modelData);
+                        else Quickshell.execDetached([Quickshell.env("HOME") + "/.local/bin/kalango-calendar"]);
                     }
                 }
             }
