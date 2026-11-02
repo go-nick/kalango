@@ -14,6 +14,8 @@ ShellRoot {
         implicitWidth: 1400
         implicitHeight: 900
         color: "#000000"
+        // Closing the window ends the app
+        onVisibleChanged: if (!visible) Qt.quit()
 
         // Runs calendarctl's sync in the background
         FlightDeck.Service {
