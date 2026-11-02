@@ -137,6 +137,12 @@ ks org.kde.plasma.emojier.desktop _launch Meta+. Meta+Ctrl+Alt+Shift+Space
 ks systemsettings.desktop _launch Meta+,
 ks kalango-keys.desktop _launch Meta+/
 
+echo ":: default browser"
+xdg-settings set default-web-browser zen.desktop
+for mime in text/html application/xhtml+xml x-scheme-handler/http x-scheme-handler/https; do
+    xdg-mime default zen.desktop "$mime"
+done
+
 echo ":: window rules"
 R=kwinrulesrc id=kalango-keys-popup
 kw $R $id Description "Kalango Keys popup"
