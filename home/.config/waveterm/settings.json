@@ -3,5 +3,6 @@
     "window:opacity": 0.5,
     "term:theme": "kalango",
     "term:transparency": 0.5,
-    "tab:background": "bg@kalango"
+    "tab:background": "bg@kalango",
+    "window:tilegapsize": 6
 }
