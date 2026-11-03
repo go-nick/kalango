@@ -2,7 +2,9 @@
 # Run inside packaging/: make <target> PKG=<name>  (from the repo root: make -C packaging ...)
 
 PROJECT := home:go-nick:kalango
+GIT_URL := https://github.com/go-nick/kalango
 PKG ?=
+BRANCH ?= main
 
 # Stops unless PKG names an existing package folder
 define need-pkg
@@ -11,7 +13,7 @@ define need-pkg
 endef
 
 .DEFAULT_GOAL := help
-.PHONY: help new build changes
+.PHONY: help new build changes obs
 
 help: ## Show this help
 	@echo "usage: make <target> PKG=<name>  (inside packaging/; from the repo root: make -C packaging ...)"
@@ -33,3 +35,12 @@ changes: ## Add an entry to <PKG>.changes: make changes PKG=<name> MSG="what cha
 	$(need-pkg)
 	@test -n "$(MSG)" || { echo 'usage: make changes PKG=<name> MSG="what changed"'; exit 1; }
 	cd "$(PKG)" && osc vc -m "$(MSG)"
+
+obs: ## Create or update <PKG> on OBS, synced from Git (BRANCH=main by default; merge first)
+	$(need-pkg)
+	printf '%s\n' \
+	  '<package name="$(PKG)" project="$(PROJECT)">' \
+	  "  <title>$(PKG)</title>" \
+	  "  <description>$$(sed -n 's/^Summary: *//p' "$(PKG)/$(PKG).spec")</description>" \
+	  '  <scmsync>$(GIT_URL)?subdir=packaging/$(PKG)#$(BRANCH)</scmsync>' \
+	  '</package>' | osc meta pkg $(PROJECT) "$(PKG)" -F -
