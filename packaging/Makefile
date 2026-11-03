@@ -4,7 +4,6 @@
 PROJECT := home:go-nick:kalango
 GIT_URL := https://github.com/go-nick/kalango
 PKG ?=
-BRANCH ?= main
 
 # Stops unless PKG names an existing package folder
 define need-pkg
@@ -36,13 +35,13 @@ changes: ## Add an entry to <PKG>.changes: make changes PKG=<name> MSG="what cha
 	@test -n "$(MSG)" || { echo 'usage: make changes PKG=<name> MSG="what changed"'; exit 1; }
 	cd "$(PKG)" && osc vc -m "$(MSG)"
 
-obs: ## Create or update <PKG> on OBS, synced from Git (BRANCH=main by default; merge first)
+obs: ## Create or update <PKG> on OBS, synced from main (merge first)
 	$(need-pkg)
 	printf '%s\n' \
 	  '<package name="$(PKG)" project="$(PROJECT)">' \
 	  "  <title>$(PKG)</title>" \
 	  "  <description>$$(sed -n 's/^Summary: *//p' "$(PKG)/$(PKG).spec")</description>" \
-	  '  <scmsync>$(GIT_URL)?subdir=packaging/$(PKG)#$(BRANCH)</scmsync>' \
+	  '  <scmsync>$(GIT_URL)?subdir=packaging/$(PKG)#main</scmsync>' \
 	  '</package>' | osc meta pkg $(PROJECT) "$(PKG)" -F -
 
 status: ## Show <PKG>'s build result on OBS
