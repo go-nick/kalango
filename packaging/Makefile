@@ -13,7 +13,7 @@ define need-pkg
 endef
 
 .DEFAULT_GOAL := help
-.PHONY: help new build changes obs
+.PHONY: help new build changes obs status
 
 help: ## Show this help
 	@echo "usage: make <target> PKG=<name>  (inside packaging/; from the repo root: make -C packaging ...)"
@@ -44,3 +44,7 @@ obs: ## Create or update <PKG> on OBS, synced from Git (BRANCH=main by default; 
 	  "  <description>$$(sed -n 's/^Summary: *//p' "$(PKG)/$(PKG).spec")</description>" \
 	  '  <scmsync>$(GIT_URL)?subdir=packaging/$(PKG)#$(BRANCH)</scmsync>' \
 	  '</package>' | osc meta pkg $(PROJECT) "$(PKG)" -F -
+
+status: ## Show <PKG>'s build result on OBS
+	$(need-pkg)
+	osc results $(PROJECT) "$(PKG)"
