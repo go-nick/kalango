@@ -54,5 +54,6 @@ buildlog: ## Show <PKG>'s latest build log from OBS
 
 delete: ## Remove <PKG> from OBS, after asking. The Git folder stays
 	@test -n "$(PKG)" || { echo "usage: make delete PKG=<name>"; exit 1; }
+	@test ! -e "$(PKG)" || echo "warning: packaging/$(PKG)/ still exists in Git. Remove it too, or the next make obs brings the package back"
 	@read -p "Delete $(PKG) from $(PROJECT) on OBS? [y/N] " a && [ "$$a" = y ] || { echo "not deleted"; exit 1; }
 	osc rdelete $(PROJECT) "$(PKG)" -m "removed with make delete"
