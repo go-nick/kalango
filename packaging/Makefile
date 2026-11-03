@@ -13,7 +13,7 @@ define need-pkg
 endef
 
 .DEFAULT_GOAL := help
-.PHONY: help new build changes obs status buildlog
+.PHONY: help new build changes obs status buildlog delete
 
 help: ## Show this help
 	@echo "usage: make <target> PKG=<name>  (inside packaging/; from the repo root: make -C packaging ...)"
@@ -52,3 +52,8 @@ status: ## Show <PKG>'s build result on OBS
 buildlog: ## Show <PKG>'s latest build log from OBS
 	$(need-pkg)
 	osc buildlog $(PROJECT) "$(PKG)" openSUSE_Tumbleweed x86_64
+
+delete: ## Remove <PKG> from OBS, after asking. The Git folder stays
+	@test -n "$(PKG)" || { echo "usage: make delete PKG=<name>"; exit 1; }
+	@read -p "Delete $(PKG) from $(PROJECT) on OBS? [y/N] " a && [ "$$a" = y ] || { echo "not deleted"; exit 1; }
+	osc rdelete $(PROJECT) "$(PKG)" -m "removed with make delete"
