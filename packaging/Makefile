@@ -13,7 +13,7 @@ define need-pkg
 endef
 
 .DEFAULT_GOAL := help
-.PHONY: help new build changes obs status
+.PHONY: help new build changes obs status buildlog
 
 help: ## Show this help
 	@echo "usage: make <target> PKG=<name>  (inside packaging/; from the repo root: make -C packaging ...)"
@@ -48,3 +48,7 @@ obs: ## Create or update <PKG> on OBS, synced from Git (BRANCH=main by default; 
 status: ## Show <PKG>'s build result on OBS
 	$(need-pkg)
 	osc results $(PROJECT) "$(PKG)"
+
+buildlog: ## Show <PKG>'s latest build log from OBS
+	$(need-pkg)
+	osc buildlog $(PROJECT) "$(PKG)" openSUSE_Tumbleweed x86_64
