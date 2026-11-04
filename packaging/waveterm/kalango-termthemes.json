@@ -23,6 +23,6 @@
         "foreground": "#E6F1EC",
         "background": "#000000",
         "cursor": "#3DFF9A",
-        "selectionBackground": "#0C322C"
+        "selectionBackground": "#2E6BFF80"
     }
 }

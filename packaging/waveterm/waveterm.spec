@@ -20,6 +20,13 @@ URL:            https://www.waveterm.dev
 Source0:        https://github.com/wavetermdev/waveterm/releases/download/v%{version}/waveterm-linux-x86_64-%{version}.rpm
 #!RemoteAsset:  sha256:2961c11688c782253260f3094ef85163871b9bcef1cfc21f8e0650170c736828
 Source1:        https://raw.githubusercontent.com/wavetermdev/waveterm/v%{version}/LICENSE
+# kalango's launcher, Wave defaults and KWin placement script
+Source2:        kalango-wave
+Source3:        kalango-settings.json
+Source4:        kalango-termthemes.json
+Source5:        kalango-backgrounds.json
+Source6:        kalango-wave-placement.json
+Source7:        kalango-wave-placement.js
 BuildRequires:  cpio
 # Owns the /usr/share/icons/hicolor folders the icons go into
 BuildRequires:  hicolor-icon-theme
@@ -29,9 +36,12 @@ ExclusiveArch:  x86_64
 # Upstream's requirements that aren't libraries, so rpm can't detect them
 Requires:       at-spi2-core
 Requires:       xdg-utils
+# kalango-wave marks Wave's windows for blur with it
+Requires:       xprop
 
 %description
-Wave Terminal, repackaged from the official release for kalango.
+Wave Terminal, repackaged from the official release for kalango, with kalango's
+launcher, theme and defaults.
 
 %prep
 %setup -q -c -T
@@ -47,17 +57,35 @@ mkdir -p %{buildroot}%{_bindir}
 ln -s /opt/Wave/waveterm %{buildroot}%{_bindir}/waveterm
 # Ubuntu's AppArmor profile; Tumbleweed doesn't use it
 rm %{buildroot}/opt/Wave/resources/apparmor-profile
-# Upstream lists no main menu category
-sed -i 's/^Categories=TerminalEmulator;$/Categories=System;TerminalEmulator;/' %{buildroot}%{_datadir}/applications/waveterm.desktop
+# Upstream lists no main menu category; the launcher entry starts kalango-wave
+sed -i -e 's/^Categories=TerminalEmulator;$/Categories=System;TerminalEmulator;/' \
+       -e 's|^Exec=.*|Exec=%{_bindir}/kalango-wave %U|' \
+       %{buildroot}%{_datadir}/applications/waveterm.desktop
+install -Dm755 %{SOURCE2} %{buildroot}%{_bindir}/kalango-wave
+install -Dm644 %{SOURCE3} %{buildroot}%{_datadir}/kalango/waveterm/settings.json
+install -Dm644 %{SOURCE4} %{buildroot}%{_datadir}/kalango/waveterm/termthemes.json
+install -Dm644 %{SOURCE5} %{buildroot}%{_datadir}/kalango/waveterm/backgrounds.json
+install -Dm644 %{SOURCE6} %{buildroot}%{_datadir}/kwin/scripts/kalango-wave-placement/metadata.json
+install -Dm644 %{SOURCE7} %{buildroot}%{_datadir}/kwin/scripts/kalango-wave-placement/contents/code/main.js
 
 %posttrans
-# Replacing upstream's RPM runs its uninstall script after this package is in place,
-# and that script deletes /usr/bin/waveterm. Put the link back.
+# Upstream's RPM registered /usr/bin/waveterm with update-alternatives, and its
+# uninstall script removes the link after this package is in place. Drop the
+# registration and put this package's link back.
+if [ -e %{_localstatedir}/lib/alternatives/waveterm ]; then
+    update-alternatives --remove-all waveterm || :
+fi
 [ -e %{_bindir}/waveterm ] || ln -s ../../opt/Wave/waveterm %{_bindir}/waveterm
 
 %files
 %license LICENSE
 /opt/Wave
 %{_bindir}/waveterm
+%{_bindir}/kalango-wave
 %{_datadir}/applications/waveterm.desktop
+%{_datadir}/kalango
+# KWin owns these, but it isn't needed to build; folders may have several owners
+%dir %{_datadir}/kwin
+%dir %{_datadir}/kwin/scripts
+%{_datadir}/kwin/scripts/kalango-wave-placement
 %{_datadir}/icons/hicolor/*/apps/waveterm.png

@@ -1,4 +1,5 @@
-# openSUSE Tumbleweed packages kalango needs (installed by install.sh with zypper)
+# Packages kalango needs, installed by install.sh with zypper: official openSUSE ones
+# first, kalango's own from its OBS repo at the end
 
 # fonts
 inter-fonts
@@ -25,9 +26,6 @@ pipewire-tools
 # calendar (Flight Deck): runs its backend, keeps sign-in tokens in the keyring
 python3
 secret-tool
-
-# xprop: asks KWin to blur behind Wave Terminal
-xprop
 
 # xdg-settings, xdg-mime: set the default browser
 xdg-utils
@@ -63,3 +61,6 @@ polkit-devel
 glib2-devel
 jemalloc-devel
 cpptrace-devel
+
+# kalango packages, from the kalango OBS repo (see packaging/)
+waveterm

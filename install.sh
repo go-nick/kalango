@@ -5,6 +5,11 @@ set -euo pipefail
 
 REPO=$(cd "$(dirname "$0")" && pwd)
 
+echo ":: kalango repo (sudo)"
+zypper lr kalango >/dev/null 2>&1 ||
+    sudo zypper ar -f https://download.opensuse.org/repositories/home:/go-nick:/kalango/openSUSE_Tumbleweed/ kalango
+sudo zypper --gpg-auto-import-keys refresh kalango
+
 echo ":: packages (sudo)"
 grep -vE '^\s*(#|$)' "$REPO/packages.txt" | xargs sudo zypper --non-interactive install --no-recommends
 
@@ -14,8 +19,6 @@ echo ":: files -> \$HOME"
     dest="$HOME/${f#./}"
     # Never clobber favorites someone already starred
     [[ "$f" == */keys-favorites.json && -e "$dest" ]] && continue
-    # Wave writes to its own settings; only new users get kalango's
-    [[ "$f" == */waveterm/settings.json && -e "$dest" ]] && continue
     mkdir -p "$(dirname "$dest")"
     # Dev setups symlink repo dirs into $HOME; writing a file onto itself would empty it
     [[ "$(realpath -m "$dest")" == "$(realpath "$REPO/home/$f")" ]] && continue
@@ -47,9 +50,6 @@ echo ":: quickshell"
 
 echo ":: calendar"
 "$REPO/scripts/install-calendar.sh"
-
-echo ":: wave terminal (sudo)"
-"$REPO/scripts/install-wave.sh"
 
 echo ":: zen browser"
 "$REPO/scripts/install-zen.sh"
