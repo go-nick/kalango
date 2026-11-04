@@ -50,6 +50,11 @@ rm %{buildroot}/opt/Wave/resources/apparmor-profile
 # Upstream lists no main menu category
 sed -i 's/^Categories=TerminalEmulator;$/Categories=System;TerminalEmulator;/' %{buildroot}%{_datadir}/applications/waveterm.desktop
 
+%posttrans
+# Replacing upstream's RPM runs its uninstall script after this package is in place,
+# and that script deletes /usr/bin/waveterm. Put the link back.
+[ -e %{_bindir}/waveterm ] || ln -s ../../opt/Wave/waveterm %{_bindir}/waveterm
+
 %files
 %license LICENSE
 /opt/Wave
