@@ -69,8 +69,12 @@ install -Dm644 %{SOURCE6} %{buildroot}%{_datadir}/kwin/scripts/kalango-wave-plac
 install -Dm644 %{SOURCE7} %{buildroot}%{_datadir}/kwin/scripts/kalango-wave-placement/contents/code/main.js
 
 %posttrans
-# Replacing upstream's RPM runs its uninstall script after this package is in place,
-# and that script deletes /usr/bin/waveterm. Put the link back.
+# Upstream's RPM registered /usr/bin/waveterm with update-alternatives, and its
+# uninstall script removes the link after this package is in place. Drop the
+# registration and put this package's link back.
+if [ -e %{_localstatedir}/lib/alternatives/waveterm ]; then
+    update-alternatives --remove-all waveterm || :
+fi
 [ -e %{_bindir}/waveterm ] || ln -s ../../opt/Wave/waveterm %{_bindir}/waveterm
 
 %files
