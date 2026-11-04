@@ -4,5 +4,6 @@
     "term:theme": "kalango",
     "term:transparency": 0.75,
     "tab:background": "bg@kalango",
-    "window:tilegapsize": 16
+    "window:tilegapsize": 16,
+    "autoupdate:enabled": false
 }
