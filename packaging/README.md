@@ -22,6 +22,7 @@ packaging/
 └── <package>/
     ├── <package>.spec       # the RPM recipe
     ├── <package>.changes    # changelog, one entry per change
+    ├── <package>-rpmlintrc  # optional: rpmlint findings to ignore, each with a reason
     └── *.patch
 ```
 
@@ -45,7 +46,7 @@ by itself.
 | Target | Runs | Notes |
 |---|---|---|
 | `new` | copies the template, `osc vc` | Refuses if the folder exists |
-| `build` | `osc build` | Local, same environment as OBS. Asks the root password |
+| `build` | `download_assets`, `osc build` | Local, same environment as OBS. Works on a copy in `.build/` (gitignored). Asks the root password |
 | `changes` | `osc vc -m "$MSG"` | Name and email come from the OBS account |
 | `obs` | `osc meta pkg ... -F -` | Points the package at `packaging/<name>` on `main`. Merge first |
 | `status` | `osc results` | |
@@ -57,6 +58,33 @@ by itself.
 - `Release: 0`: OBS sets the real release number
 - Keep `%prep` and `%build`, even if empty. Don't add an empty `%check`
 - `BuildArch: noarch` for packages with nothing compiled
+
+## Sources from the internet
+
+Builds have no network. Mark each downloaded source with `#!RemoteAsset` and its
+checksum, on the line above it:
+
+```spec
+#!RemoteAsset:  sha256:<checksum>
+Source0:        https://example.org/foo-%{version}.tar.gz
+```
+
+The build tools download it before the build and refuse a file whose checksum doesn't
+match. `make build` keeps downloads in `~/.cache/kalango/assets`, keyed by checksum, so
+they aren't fetched again. To get the checksum of a new version:
+
+```
+curl -fsSL <url> | sha256sum
+```
+
+A version bump changes `Version` and every `#!RemoteAsset` checksum.
+
+## rpmlint
+
+rpmlint checks every build; past a badness of 999 the build fails. Fix what's ours. For
+findings that come with upstream's files (prebuilt binaries), add `addFilter("<check>
+<path>")` lines to `<package>-rpmlintrc`, as narrow as possible, each with a comment
+saying why. See `waveterm/waveterm-rpmlintrc`.
 
 ## One-time setup (dev machine)
 
