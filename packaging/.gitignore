@@ -1,0 +1,2 @@
+# Local build copies with downloaded sources (make build)
+.build/

@@ -5,6 +5,10 @@ PROJECT := home:go-nick:kalango
 GIT_URL := https://github.com/go-nick/kalango
 PKG ?=
 
+# make build works on a copy in .build/, so downloaded sources never land in Git.
+# Downloads are cached by checksum, so rebuilding doesn't fetch them again.
+ASSET_CACHE := $(HOME)/.cache/kalango/assets
+
 # Stops unless PKG names an existing package folder
 define need-pkg
 	@test -n "$(PKG)" || { echo "usage: make $@ PKG=<name>"; exit 1; }
@@ -28,7 +32,9 @@ new: ## Scaffold packaging/<PKG>/ from templates/: spec plus an initial .changes
 
 build: ## Build <PKG> locally in the same clean environment as OBS (asks the root password)
 	$(need-pkg)
-	cd "$(PKG)" && osc build --alternative-project=$(PROJECT) openSUSE_Tumbleweed x86_64 "$(PKG).spec"
+	rm -rf ".build/$(PKG)" && mkdir -p .build && cp -r "$(PKG)" ".build/$(PKG)"
+	/usr/lib/build/download_assets --assetdir "$(ASSET_CACHE)" ".build/$(PKG)"
+	cd ".build/$(PKG)" && osc build --alternative-project=$(PROJECT) openSUSE_Tumbleweed x86_64 "$(PKG).spec"
 
 changes: ## Add an entry to <PKG>.changes: make changes PKG=<name> MSG="what changed"
 	$(need-pkg)

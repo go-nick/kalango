@@ -1,0 +1,16 @@
+# Wave is a prebuilt Electron app, repackaged as upstream ships it. These findings come
+# with upstream's binaries and layout; they aren't fixable without rebuilding Wave.
+
+# Upstream installs to /opt/Wave
+addFilter("filelist-forbidden-opt /opt/Wave")
+addFilter("dir-or-file-outside-snapshot /opt/Wave/")
+# Electron finds its bundled libraries next to itself ($ORIGIN)
+addFilter("binary-or-shlib-defines-rpath /opt/Wave/")
+# wsh: Wave copies these to remote hosts over SSH, for every CPU type
+addFilter("statically-linked-binary /opt/Wave/resources/app.asar.unpacked/dist/bin/wsh-")
+# tsunamiscaffold: node modules Wave uses at runtime, kept as shipped
+addFilter("devel-file-in-non-devel-package /opt/Wave/resources/tsunamiscaffold/")
+addFilter("zero-length /opt/Wave/resources/tsunamiscaffold/")
+addFilter("version-control-internal-file /opt/Wave/resources/tsunamiscaffold/")
+addFilter("non-executable-script /opt/Wave/resources/tsunamiscaffold/")
+addFilter("env-script-interpreter /opt/Wave/resources/tsunamiscaffold/")
